@@ -3,9 +3,9 @@ import { Usuario } from '../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoginFormInterface } from '../interfaces/login-form.interface';
-import { baseUrl } from '../common/base-url';
 import { catchError, map, of, tap } from 'rxjs';
 import { headers } from '../utils/headers.utils';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class UsuariosService {
   constructor(private http: HttpClient, private router: Router) { }
 
   login(loginForm: LoginFormInterface) {
-    return this.http.post(`${baseUrl}/api/usuarios/login`, loginForm)
+    return this.http.post(`${environment.apiUrl}/auth/login`, loginForm, headers())
       .pipe(
         tap(res => {
           localStorage.setItem('token', res['token'] as string);
@@ -45,7 +45,7 @@ export class UsuariosService {
       return of(incorrecto);
     }
 
-    return this.http.get(`${baseUrl}/login/token`, headers)
+    return this.http.get(`${environment.apiUrl}/auth/refresh-token`, headers())
       .pipe(
         tap((res: any) => {
           const { token, id, email, password, idRol } = res;

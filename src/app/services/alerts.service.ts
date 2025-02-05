@@ -45,6 +45,12 @@ export class AlertsService {
     }, this.duration);
   }
 
+  showError(message: string, err: any) {
+    console.error(err);
+    const msg = err.error.message || message;
+    this.showAlert('Error', msg, 'danger');
+  }
+
   private createAlertElement(title: string, message: string, type: 'info' | 'success' | 'warning' | 'danger'): HTMLElement {
     const alert = this.renderer.createElement('div');
 
