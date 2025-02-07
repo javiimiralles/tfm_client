@@ -3,9 +3,10 @@ import { Usuario } from '../models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { LoginFormInterface } from '../interfaces/login-form.interface';
-import { catchError, map, of, tap } from 'rxjs';
-import { headers } from '../utils/headers.utils';
+import {catchError, forkJoin, map, of, switchMap, tap} from 'rxjs';
 import { environment } from '../../environments/environment';
+import { HeadersService } from './headers.service';
+import { EmpleadosService } from './empleados.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,22 @@ export class UsuariosService {
 
   private usuario: Usuario;
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private headersService: HeadersService,
+    private empleadosService: EmpleadosService
+  ) { }
 
   login(loginForm: LoginFormInterface) {
-    return this.http.post(`${environment.apiUrl}/auth/login`, loginForm, headers())
+    return this.http.post(`${environment.apiUrl}/auth/login`, loginForm, this.headersService.getHeaders())
       .pipe(
         tap(res => {
-          localStorage.setItem('token', res['token'] as string);
-          this.usuario = new Usuario(res['id']);
+          const idUsuario = res['id'];
+          if (idUsuario) {
+            localStorage.setItem('token', res['token'] as string);
+            this.usuario = new Usuario(res['id']);
+          }
         })
       )
   }
@@ -45,21 +54,29 @@ export class UsuariosService {
       return of(incorrecto);
     }
 
-    return this.http.get(`${environment.apiUrl}/auth/refresh-token`, headers())
-      .pipe(
-        tap((res: any) => {
-          const { token, id, email, password, idRol } = res;
-          this.usuario = new Usuario(id, email, password, idRol);
-          localStorage.setItem('token', token);
-        }),
-        map (res => {
-          return correcto;
-        }),
-        catchError (err => {
-          this.cleanLocalStorage();
-          return of(incorrecto);
-        })
-      );
+    const tokenRequest = this.http.get(`${environment.apiUrl}/auth/refresh-token`, this.headersService.getHeaders());
+    const empleadoRequest = (id: number) => this.empleadosService.getEmpleadoByIdUsuario(id);
+
+    return tokenRequest.pipe(
+      switchMap((res: any) => {
+        const { token, data: { id, email, rol, permisos } } = res;
+        this.usuario = new Usuario(id, email, undefined, rol, permisos);
+        localStorage.setItem('token', token);
+
+        return forkJoin([
+          of(correcto),
+          empleadoRequest(id),
+        ]);
+      }),
+      tap(([_, res]) => {
+        this.empleadosService.setEmpleado(res['data']);
+      }),
+      map(([result]) => result),
+      catchError(() => {
+        this.cleanLocalStorage();
+        return of(incorrecto);
+      })
+    );
   }
 
   private cleanLocalStorage() {
@@ -71,18 +88,18 @@ export class UsuariosService {
   }
 
   get id() {
-    return this.usuario.id;
+    return this.usuario ? this.usuario.id : null;
   }
 
   get email() {
-    return this.usuario.email;
+    return this.usuario ? this.usuario.email : null;
   }
 
-  get password() {
-    return this.usuario.password;
+  get rol() {
+    return this.usuario ? this.usuario.rol : null;
   }
 
-  get idRol() {
-    return this.usuario.idRol;
+  get permisos() {
+    return this.usuario ? this.usuario.permisos : null;
   }
 }

@@ -3,7 +3,8 @@ export class Usuario {
     public id?: number,
     public email?: string,
     public password?: string,
-    public idRol?: number
+    public rol?: string,
+    public permisos?: string[]
   ) {
   }
 }

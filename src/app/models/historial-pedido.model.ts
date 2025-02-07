@@ -1,4 +1,4 @@
-import {EstadoPedidoEnum} from '../../../../../../../../../Desktop/enums/estado-pedido.enum';
+import {EstadoPedidoEnum} from '../enums/estado-pedido.enum';
 
 export class HistorialPedido {
   constructor(

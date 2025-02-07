@@ -1,6 +1,7 @@
-import {EstadoPedidoEnum} from '../../../../../../../../../Desktop/enums/estado-pedido.enum';
-import {TipoPedidoEnum} from '../../../../../../../../../Desktop/enums/tipo-pedido.enum';
-import {MetodoPagoEnum} from '../../../../../../../../../Desktop/enums/metodo-pago.enum';
+import { EstadoPedidoEnum } from "../enums/estado-pedido.enum";
+import { MetodoPagoEnum } from "../enums/metodo-pago.enum";
+import { TipoPedidoEnum } from "../enums/tipo-pedido.enum";
+
 
 export class Pedido {
   constructor(

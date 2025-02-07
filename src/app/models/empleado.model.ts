@@ -1,4 +1,4 @@
-import {GeneroEnum} from '../../../../../../../../../Desktop/enums/genero.enum';
+import { GeneroEnum } from "../enums/genero.enum";
 
 export class Empleado {
   constructor(

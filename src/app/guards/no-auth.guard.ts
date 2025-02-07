@@ -11,7 +11,7 @@ export const noAuthGuard: CanActivateFn = (route, state) => {
     .pipe(
       tap(isValid => {
         if (!isValid) {
-          router.navigate(['/dashboard']);
+          router.navigate(['/user/dashboard']);
         }
       })
     );

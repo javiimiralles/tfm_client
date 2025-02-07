@@ -1,4 +1,4 @@
-export class ClienteModel {
+export class Cliente {
   constructor(
     public id?: number,
     public idEmpresa?: number,

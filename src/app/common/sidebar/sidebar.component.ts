@@ -1,19 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { initDropdowns } from 'flowbite';
 import { SidebarItemInterface } from '../../interfaces/sidebar-item-interface';
 
 @Component({
   selector: 'app-sidebar',
   imports: [RouterLink, RouterLinkActive],
   templateUrl: './sidebar.component.html',
+  standalone: true,
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent {
 
   sidebarItems: SidebarItemInterface[] = [
     {  title: 'Dashboard', icon: 'dashboard', link: '/user/dashboard' },
-    { title: 'Clientes', icon: 'people', link: '/user/clientes' },
+    { title: 'Clientes', icon: 'people', link: '/user/clientes-table' },
     { title: 'Ventas', icon: 'shopping_cart', children: [
       { title: 'Presupuestos', link: '/user/ventas/presupuestos' },
       { title: 'Facturas', link: '/user/ventas/facturas' },
@@ -25,10 +25,12 @@ export class SidebarComponent implements OnInit {
     ]}
   ];
 
+  dropdownStates: { [key: string]: boolean } = {};
+
   constructor() { }
 
-  ngOnInit(): void {
-    initDropdowns();
+  toggleDropdownState(title: string) {
+    this.dropdownStates[title] = !this.dropdownStates[title];
   }
 
 }

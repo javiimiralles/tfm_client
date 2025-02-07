@@ -1,4 +1,4 @@
-import {EstadoPedidoProveedorEnum} from "../../../../../../../../../Desktop/enums/estado-pedido-proveedor.enum";
+import { EstadoPedidoProveedorEnum } from "../enums/estado-pedido-proveedor.enum";
 
 export class PedidoProveedor {
     constructor(
