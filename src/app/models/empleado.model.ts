@@ -1,4 +1,5 @@
 import { GeneroEnum } from "../enums/genero.enum";
+import {Pais} from './pais.model';
 
 export class Empleado {
   constructor(
@@ -7,8 +8,13 @@ export class Empleado {
     public idUsuario?: number,
     public nombre?: string,
     public apellidos?: string,
+    public nif?: string,
     public telefono?: string,
     public direccion?: string,
+    public pais?: Pais,
+    public provincia?: string,
+    public poblacion?: string,
+    public codigoPostal?: string,
     public fechaNacimiento?: Date,
     public genero?: GeneroEnum | string,
     public idRespAlta?: number,

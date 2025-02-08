@@ -10,6 +10,10 @@ export class ClientesService {
 
   constructor(private http: HttpClient, private headersService: HeadersService) { }
 
+  getClienteById(id: number) {
+    return this.http.get(`${environment.apiUrl}/clientes/${id}`, this.headersService.getHeaders());
+  }
+
   getClientesByEmpresa(idEmpresa: number) {
     return this.http.get(`${environment.apiUrl}/clientes/empresa/${idEmpresa}`, this.headersService.getHeaders());
   }

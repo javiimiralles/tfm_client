@@ -7,6 +7,7 @@ import {catchError, forkJoin, map, of, switchMap, tap} from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HeadersService } from './headers.service';
 import { EmpleadosService } from './empleados.service';
+import { cleanLocalStorage } from '../utils/local-storage.util';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class UsuariosService {
     return this.http.post(`${environment.apiUrl}/auth/login`, loginForm, this.headersService.getHeaders())
       .pipe(
         tap(res => {
-          const idUsuario = res['id'];
+          const idUsuario = res['data']?.id;
           if (idUsuario) {
             localStorage.setItem('token', res['token'] as string);
             this.usuario = new Usuario(res['id']);
@@ -36,7 +37,7 @@ export class UsuariosService {
   }
 
   logout() {
-    this.cleanLocalStorage();
+    cleanLocalStorage();
     this.router.navigate(['/login']);
   }
 
@@ -48,9 +49,14 @@ export class UsuariosService {
     return this.validate(false, true);
   }
 
+  hasPermission(permiso: string) {
+    if (!this.permisos) return false;
+    return this.permisos.includes(permiso);
+  }
+
   private validate(correcto: boolean, incorrecto: boolean) {
     if (this.token === '') {
-      this.cleanLocalStorage();
+      cleanLocalStorage();
       return of(incorrecto);
     }
 
@@ -73,14 +79,10 @@ export class UsuariosService {
       }),
       map(([result]) => result),
       catchError(() => {
-        this.cleanLocalStorage();
+        cleanLocalStorage();
         return of(incorrecto);
       })
     );
-  }
-
-  private cleanLocalStorage() {
-    localStorage.removeItem('token');
   }
 
   get token(): string {

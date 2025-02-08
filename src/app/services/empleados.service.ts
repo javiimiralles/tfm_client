@@ -46,12 +46,32 @@ export class EmpleadosService {
     return this.empleado ? this.empleado.apellidos : undefined;
   }
 
+  get nif() {
+    return this.empleado ? this.empleado.nif : undefined;
+  }
+
   get telefono() {
     return this.empleado ? this.empleado.telefono : undefined;
   }
 
   get direccion() {
     return this.empleado ? this.empleado.direccion : undefined;
+  }
+
+  get pais() {
+    return this.empleado ? this.empleado.pais : undefined;
+  }
+
+  get provincia() {
+    return this.empleado ? this.empleado.provincia : undefined;
+  }
+
+  get poblacion() {
+    return this.empleado ? this.empleado.poblacion : undefined;
+  }
+
+  get codigoPostal() {
+    return this.empleado ? this.empleado.codigoPostal : undefined;
   }
 
   get fechaNacimiento() {

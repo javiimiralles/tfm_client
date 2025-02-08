@@ -3,7 +3,7 @@
   <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
     <ul class="space-y-2 font-medium">
       @for (item of sidebarItems; track item.title) {
-        @if (item.children != undefined) {
+        @if (item.isAllowed && item.children) {
           <li>
             <button type="button"
               class="flex cursor-pointer items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -19,14 +19,16 @@
             <ul [class.hidden]="!dropdownStates[item.title]"
                 class="hidden py-2 space-y-2">
               @for (child of item.children; track child.title) {
-                <li>
-                  <a href="#" routerLink="{{ child.link }}" routerLinkActive="bg-gray-100 dark:bg-gray-700"
-                    class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">{{ child.title }}</a>
-                </li>
+                @if(child.isAllowed) {
+                  <li>
+                    <a href="#" routerLink="{{ child.link }}" routerLinkActive="bg-gray-100 dark:bg-gray-700"
+                      class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">{{ child.title }}</a>
+                  </li>
+                }
               }
             </ul>
           </li>
-        } @else {
+        } @else if (item.isAllowed) {
           <li>
             <a href="#" routerLink="{{ item.link }}" routerLinkActive="bg-gray-100 dark:bg-gray-700"
               class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

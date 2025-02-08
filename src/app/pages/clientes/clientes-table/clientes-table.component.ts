@@ -4,10 +4,12 @@ import {ClientesService} from '../../../services/clientes.service';
 import {AlertsService} from '../../../services/alerts.service';
 import {EmpleadosService} from '../../../services/empleados.service';
 import {formatDate} from '../../../utils/date.util';
+import {RouterLink} from '@angular/router';
+import {UsuariosService} from '../../../services/usuarios.service';
 
 @Component({
   selector: 'app-clientes-table',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './clientes-table.component.html',
   standalone: true,
   styleUrl: './clientes-table.component.css'
@@ -18,13 +20,19 @@ export class ClientesTableComponent implements OnInit {
   idEmpresa: number;
   dropdownStates: { [key: number]: boolean } = {};
 
+  showCreateButton = false;
+  showEditButton = false;
+  showDeleteButton = false;
+
   constructor(
+    private usuariosService: UsuariosService,
     private clientesService: ClientesService,
     private alertsService: AlertsService,
-    private empleadosService: EmpleadosService
+    private empleadosService: EmpleadosService,
   ) { }
 
   ngOnInit() {
+    this.checkPermissions();
     this.idEmpresa = this.empleadosService.idEmpresa!;
     this.loadClientes();
   }
@@ -67,6 +75,18 @@ export class ClientesTableComponent implements OnInit {
 
   formatDate(date: Date): string {
     return formatDate(date);
+  }
+
+  checkPermissions() {
+    if (!this.usuariosService.hasPermission('ACCESO_CLIENTES')) {
+      this.alertsService.showError('No tienes permisos para acceder a esta página');
+      this.usuariosService.logout();
+      return;
+    }
+
+    this.showCreateButton = this.usuariosService.hasPermission('CREACION_CLIENTES');
+    this.showEditButton = this.usuariosService.hasPermission('EDICION_CLIENTES');
+    this.showDeleteButton = this.usuariosService.hasPermission('ELIMINACION_CLIENTES');
   }
 
 

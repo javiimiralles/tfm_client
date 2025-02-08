@@ -45,9 +45,12 @@ export class AlertsService {
     }, this.duration);
   }
 
-  showError(message: string, err: any) {
-    console.error(err);
-    const msg = err.error.message || message;
+  showError(message: string, err: any = null) {
+    let msg = message;
+    if (err) {
+      console.error(err);
+      msg = err.error.message || message;
+    }
     this.showAlert('Error', msg, 'danger');
   }
 
