@@ -10,7 +10,7 @@ export class Cliente {
     public email?: string,
     public telefono?: string,
     public direccion?: string,
-    public pais?: Pais,
+    public pais?: Pais | number,
     public provincia?: string,
     public poblacion?: string,
     public codigoPostal?: string,

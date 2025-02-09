@@ -32,7 +32,7 @@ export class ClientesTableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.checkPermissions();
+    if (!this.checkPermissions()) return;
     this.idEmpresa = this.empleadosService.idEmpresa!;
     this.loadClientes();
   }
@@ -77,16 +77,18 @@ export class ClientesTableComponent implements OnInit {
     return formatDate(date);
   }
 
-  checkPermissions() {
+  checkPermissions(): boolean {
     if (!this.usuariosService.hasPermission('ACCESO_CLIENTES')) {
       this.alertsService.showError('No tienes permisos para acceder a esta página');
       this.usuariosService.logout();
-      return;
+      return false;
     }
 
     this.showCreateButton = this.usuariosService.hasPermission('CREACION_CLIENTES');
     this.showEditButton = this.usuariosService.hasPermission('EDICION_CLIENTES');
     this.showDeleteButton = this.usuariosService.hasPermission('ELIMINACION_CLIENTES');
+
+    return true;
   }
 
 
