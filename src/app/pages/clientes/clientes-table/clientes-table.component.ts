@@ -2,14 +2,17 @@ import {Component, HostListener, OnInit} from '@angular/core';
 import {Cliente} from '../../../models/cliente.model';
 import {ClientesService} from '../../../services/clientes.service';
 import {AlertsService} from '../../../services/alerts.service';
-import {EmpleadosService} from '../../../services/empleados.service';
 import {formatDate} from '../../../utils/date.util';
 import {RouterLink} from '@angular/router';
 import {UsuariosService} from '../../../services/usuarios.service';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { BehaviorSubject, debounceTime } from 'rxjs';
+import {ClienteFilter} from '../../../filters/cliente.filter';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-clientes-table',
-  imports: [RouterLink],
+  imports: [RouterLink, ReactiveFormsModule, FormsModule, NgClass],
   templateUrl: './clientes-table.component.html',
   standalone: true,
   styleUrl: './clientes-table.component.css'
@@ -17,35 +20,60 @@ import {UsuariosService} from '../../../services/usuarios.service';
 export class ClientesTableComponent implements OnInit {
 
   clientes: Cliente[] = [];
-  idEmpresa: number;
+  pageNumber: number = 0;
+  pageSize: number = 10;
+  totalElements: number = 0;
+  totalPages: number = 1;
+
   dropdownStates: { [key: number]: boolean } = {};
 
   showCreateButton = false;
   showEditButton = false;
   showDeleteButton = false;
 
+  clienteFilter: ClienteFilter = new ClienteFilter();
+  filtersSubject = new BehaviorSubject<ClienteFilter>(new ClienteFilter());
+
   constructor(
     private usuariosService: UsuariosService,
     private clientesService: ClientesService,
-    private alertsService: AlertsService,
-    private empleadosService: EmpleadosService,
+    private alertsService: AlertsService
   ) { }
 
   ngOnInit() {
     if (!this.checkPermissions()) return;
-    this.idEmpresa = this.empleadosService.idEmpresa!;
-    this.loadClientes();
+
+    this.filtersSubject.pipe(debounceTime(500)).subscribe(() => {
+      this.loadClientes();
+    });
   }
 
   loadClientes() {
-    this.clientesService.getClientesByEmpresa(this.idEmpresa).subscribe({
+    this.clienteFilter = this.filtersSubject.getValue();
+    this.clienteFilter.page = this.pageNumber;
+    this.clienteFilter.size = this.pageSize;
+
+    this.clientesService.getClientesByFilter(this.clienteFilter).subscribe({
       next: (res) => {
-        this.clientes = res['data'];
+        this.clientes = res['data']?.content;
+        this.totalElements = res['data']?.totalElements;
+        this.totalPages = res['data']?.totalPages;
       },
       error: (err) => {
         this.alertsService.showError('Error al cargar los clientes', err);
       }
     })
+  }
+
+  onFilterChange() {
+    this.filtersSubject.next(this.clienteFilter);
+  }
+
+  goToPage(page: number) {
+    if (page >= 0 && page < this.totalPages) {
+      this.pageNumber = page;
+      this.loadClientes();
+    }
   }
 
   toggleDropdownState(idCliente: number) {
@@ -62,22 +90,11 @@ export class ClientesTableComponent implements OnInit {
     });
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-
-    // Verifica si el clic fue dentro de un dropdown o botón
-    if (!target.closest('.dropdown') && !target.closest('.dropdown-button')) {
-      // Si el clic fue fuera, cierra todos los dropdowns
-      this.dropdownStates = {};
-    }
-  }
-
   formatDate(date: Date): string {
     return formatDate(date);
   }
 
-  checkPermissions(): boolean {
+  private checkPermissions(): boolean {
     if (!this.usuariosService.hasPermission('ACCESO_CLIENTES')) {
       this.alertsService.showError('No tienes permisos para acceder a esta página');
       this.usuariosService.logout();
@@ -89,6 +106,17 @@ export class ClientesTableComponent implements OnInit {
     this.showDeleteButton = this.usuariosService.hasPermission('ELIMINACION_CLIENTES');
 
     return true;
+  }
+
+  @HostListener('document:click', ['$event'])
+  private onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    // Verifica si el clic fue dentro de un dropdown o botón
+    if (!target.closest('.dropdown') && !target.closest('.dropdown-button')) {
+      // Si el clic fue fuera, cierra todos los dropdowns
+      this.dropdownStates = {};
+    }
   }
 
 

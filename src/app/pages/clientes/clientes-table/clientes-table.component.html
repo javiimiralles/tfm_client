@@ -9,7 +9,15 @@
               search
             </span>
           </div>
-          <input type="text" id="simple-search" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Buscar">
+          <input
+            type="text"
+            id="simple-search"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+            placeholder="Buscar"
+            [(ngModel)]="clienteFilter.query"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="onFilterChange()"
+          />
         </div>
       </form>
     </div>
@@ -59,7 +67,7 @@
                   <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
                     @if (showEditButton) {
                       <li>
-                        <a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
+                        <a href="#" [routerLink]="['/user/cliente-form/', cliente.id]" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
                       </li>
                     }
                     @if (showDeleteButton) {
@@ -79,41 +87,37 @@
   <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
       <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
           Mostrando
-          <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
+          <span class="font-semibold text-gray-900 dark:text-white">{{ pageNumber * pageSize + 1 }} - {{ (pageNumber + 1) * pageSize > totalElements ? totalElements : (pageNumber + 1) * pageSize }}</span>
           de
-          <span class="font-semibold text-gray-900 dark:text-white">1000</span>
+          <span class="font-semibold text-gray-900 dark:text-white">{{ totalElements }}</span>
       </span>
     <ul class="inline-flex items-stretch -space-x-px">
       <li>
-        <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+        <button (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0"
+                class="cursor-pointer flex items-center justify-center h-full p-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           <span class="sr-only">Anterior</span>
           <span class="material-symbols-outlined">
             chevron_left
           </span>
-        </a>
+        </button>
       </li>
+      @for (i of [].constructor(totalPages); let idx = $index; track idx) {
+        <li>
+          <button (click)="goToPage(idx)"
+                  class="cursor-pointer p-2 px-3 border border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                  [ngClass]="pageNumber === idx ? 'bg-gray-100' : 'bg-white'" >
+            {{ idx + 1 }}
+          </button>
+        </li>
+      }
       <li>
-        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-      </li>
-      <li>
-        <a href="#" aria-current="page" class="flex items-center justify-center text-sm z-10 py-2 px-3 leading-tight text-primary-600 bg-primary-50 border border-primary-300 hover:bg-primary-100 hover:text-primary-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">...</a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">100</a>
-      </li>
-      <li>
-        <a href="#" class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+        <button (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber >= totalPages - 1"
+                class="cursor-pointer flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
           <span class="sr-only">Siguiente</span>
           <span class="material-symbols-outlined">
             chevron_right
           </span>
-        </a>
+        </button>
       </li>
     </ul>
   </nav>

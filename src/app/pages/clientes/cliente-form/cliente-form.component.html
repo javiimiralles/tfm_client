@@ -61,11 +61,7 @@
         <label for="pais" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
         <select id="pais" formControlName="pais" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
           @for (pais of paises; track pais.id) {
-            @if (cliente == null && pais.nombre === 'España') {
-              <option value="{{pais.id}}" selected>{{pais.nombre}}</option>
-            } @else {
-              <option value="{{pais.id}}">{{pais.nombre}}</option>
-            }
+            <option value="{{pais.id}}">{{pais.nombre}}</option>
           }
         </select>
       </div>

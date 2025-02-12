@@ -17,6 +17,7 @@ export class SidebarComponent {
   constructor(private usuariosService: UsuariosService) {
     this.sidebarItems = [
       { title: 'Dashboard', icon: 'dashboard', link: '/user/dashboard', isAllowed: true },
+      { title: 'Empleados', icon: 'badge', link: '/user/empleados-table', isAllowed: usuariosService.hasPermission('ACCESO_EMPLEADOS') },
       { title: 'Clientes', icon: 'people', link: '/user/clientes-table', isAllowed: usuariosService.hasPermission('ACCESO_CLIENTES') },
       { title: 'Ventas', icon: 'shopping_cart',
         isAllowed: usuariosService.hasPermission('ACCESO_PRESUPUESTOS') || usuariosService.hasPermission('ACCESO_FACTURAS'),

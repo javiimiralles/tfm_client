@@ -68,6 +68,11 @@ export class ClienteFormComponent implements OnInit {
   loadCliente(id: number) {
     this.clientesService.getClienteById(id).subscribe({
       next: (res) => {
+        if (!res['data']) {
+          this.alertsService.showError('Cliente no encontrado');
+          this.router.navigate(['/user/clientes-table']);
+          return;
+        }
         this.cliente = res['data'];
         this.fillForm();
       },
@@ -80,7 +85,6 @@ export class ClienteFormComponent implements OnInit {
 
   onSubmit() {
     if (this.clientForm.invalid) {
-      console.log('Formulario inválido');
       this.clientForm.markAllAsTouched();
       return;
     }
@@ -94,7 +98,9 @@ export class ClienteFormComponent implements OnInit {
 
   createCliente() {
     this.cliente = this.clientForm.value;
-    this.cliente.pais = this.paises.find(pais => pais.id === this.cliente.pais);
+    this.cliente.pais = this.clientForm.get('pais').value != null
+      ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
+      : null;
     this.clientesService.createCliente(this.cliente).subscribe({
       next: (res) => {
         this.alertsService.showAlert('Cliente creado', 'El cliente se ha creado correctamente', 'success');
@@ -107,7 +113,28 @@ export class ClienteFormComponent implements OnInit {
   }
 
   updateCliente() {
+    this.cliente.nombre = this.clientForm.get('nombre').value;
+    this.cliente.apellidos = this.clientForm.get('apellidos').value;
+    this.cliente.nif = this.clientForm.get('nif').value;
+    this.cliente.email = this.clientForm.get('email').value;
+    this.cliente.telefono = this.clientForm.get('telefono').value;
+    this.cliente.pais = this.clientForm.get('pais').value != null
+      ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
+      : null;
+    this.cliente.provincia = this.clientForm.get('provincia').value;
+    this.cliente.poblacion = this.clientForm.get('poblacion').value;
+    this.cliente.direccion = this.clientForm.get('direccion').value;
+    this.cliente.codigoPostal = this.clientForm.get('codigoPostal').value;
 
+    this.clientesService.updateCliente(this.cliente).subscribe({
+      next: (res) => {
+        this.alertsService.showAlert('Cliente actualizado', 'El cliente se ha actualizado correctamente', 'success');
+        this.router.navigate(['/user/clientes-table']);
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al actualizar el cliente', err);
+      }
+    });
   }
 
   fillForm() {
@@ -117,7 +144,7 @@ export class ClienteFormComponent implements OnInit {
       nif: this.cliente.nif,
       email: this.cliente.email,
       telefono: this.cliente.telefono,
-      pais: this.cliente.pais,
+      pais: this.cliente.pais ? (this.cliente.pais as Pais).id : null,
       provincia: this.cliente.provincia,
       poblacion: this.cliente.poblacion,
       direccion: this.cliente.direccion,
@@ -133,5 +160,4 @@ export class ClienteFormComponent implements OnInit {
     }
     return true;
   }
-
 }
