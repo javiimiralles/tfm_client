@@ -1,1 +1,137 @@
-<p>empleados-table works!</p>
+<div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+  <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
+    <div class="w-full md:w-1/2">
+      <form class="flex items-center">
+        <label for="simple-search" class="sr-only">Buscar</label>
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400 dark:text-gray-500">
+              search
+            </span>
+          </div>
+          <input
+            type="text"
+            id="simple-search"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+            placeholder="Buscar"
+            [(ngModel)]="empleadoFilter.query"
+            [ngModelOptions]="{standalone: true}"
+            (ngModelChange)="onFilterChange()"
+          />
+        </div>
+      </form>
+    </div>
+    @if (showCreateButton) {
+      <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
+        <button type="button" routerLink="/user/empleado-form/new" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+            <span class="material-symbols-outlined">
+              add
+            </span>
+          Añadir empleado
+        </button>
+      </div>
+    }
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      <tr>
+        <th scope="col" class="px-4 py-3">ID</th>
+        <th scope="col" class="px-4 py-3">Nombre</th>
+        <th scope="col" class="px-4 py-3">Rol</th>
+        <th scope="col" class="px-4 py-3">Fecha alta</th>
+        <th scope="col" class="px-4 py-3">Estado</th>
+        @if (showEditButton || showDeleteButton) {
+          <th scope="col" class="px-4 py-3">
+            <span class="sr-only">Acciones</span>
+          </th>
+        }
+      </tr>
+      </thead>
+      <tbody>
+        @for (empleado of empleados; track empleado.id) {
+          <tr>
+            <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ empleado.id }}</th>
+            <td class="px-4 py-3">{{ empleado.nombre + (empleado.apellidos ? ' ' + empleado.apellidos : '') }}</td>
+            <td class="px-4 py-3">
+              <span class="bg-indigo-200 text-xs font-bold text-indigo-800 text-center p-0.5 leading-none rounded-full px-2 dark:bg-indigo-900 dark:text-indigo-200">{{ empleado.rol }}</span>
+            </td>
+            <td class="px-4 py-3">{{ formatDate(empleado.fechaAlta) }}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center">
+                @if (empleado.fechaBaja == null) {
+                  <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Activo
+                } @else {
+                  <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> No activo
+                }
+              </div>
+            </td>
+            @if (showEditButton || showDeleteButton) {
+              <td class="px-4 py-3 flex items-center justify-end relative">
+                <button (click)="toggleDropdownState(empleado.id)" class="dropdown-button cursor-pointer inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
+                  <span class="material-symbols-outlined">
+                    more_horiz
+                  </span>
+                </button>
+                <div
+                  [class.hidden]="!dropdownStates[empleado.id]"
+                  class="dropdown absolute hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
+                    @if (showEditButton) {
+                      <li>
+                        <a href="#" [routerLink]="['/user/empleado-form/', empleado.id]" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
+                      </li>
+                    }
+                    @if (showDeleteButton) {
+                      <li>
+                        <a href="#" class="block py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Eliminar</a>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </td>
+            }
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+  <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4" aria-label="Table navigation">
+      <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
+          Mostrando
+          <span class="font-semibold text-gray-900 dark:text-white">{{ pageNumber * pageSize + 1 }} - {{ (pageNumber + 1) * pageSize > totalElements ? totalElements : (pageNumber + 1) * pageSize }}</span>
+          de
+          <span class="font-semibold text-gray-900 dark:text-white">{{ totalElements }}</span>
+      </span>
+    <ul class="inline-flex items-stretch -space-x-px">
+      <li>
+        <button (click)="goToPage(pageNumber - 1)" [disabled]="pageNumber === 0"
+                class="cursor-pointer flex items-center justify-center h-full p-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <span class="sr-only">Anterior</span>
+          <span class="material-symbols-outlined">
+            chevron_left
+          </span>
+        </button>
+      </li>
+      @for (i of [].constructor(totalPages); let idx = $index; track idx) {
+        <li>
+          <button (click)="goToPage(idx)"
+                  class="cursor-pointer p-2 px-3 border border-gray-300 hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+                  [ngClass]="pageNumber === idx ? 'bg-gray-100' : 'bg-white'" >
+            {{ idx + 1 }}
+          </button>
+        </li>
+      }
+      <li>
+        <button (click)="goToPage(pageNumber + 1)" [disabled]="pageNumber >= totalPages - 1"
+                class="cursor-pointer flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+          <span class="sr-only">Siguiente</span>
+          <span class="material-symbols-outlined">
+            chevron_right
+          </span>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</div>
+

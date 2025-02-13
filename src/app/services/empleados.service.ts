@@ -3,7 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {HeadersService} from './headers.service';
 import {environment} from '../../environments/environment';
 import {Empleado} from '../models/empleado.model';
-import {AlertsService} from './alerts.service';
+import {EmpleadoFilter} from '../filters/empleado.filter';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,7 @@ export class EmpleadosService {
 
   private empleado: Empleado;
 
-  constructor(private http: HttpClient, private headersService: HeadersService, private alertsService: AlertsService) { }
+  constructor(private http: HttpClient, private headersService: HeadersService) { }
 
   getEmpleadoById(idEmpleado: number) {
     return this.http.get(`${environment.apiUrl}/empleados/${idEmpleado}`, this.headersService.getHeaders());
@@ -20,6 +20,11 @@ export class EmpleadosService {
 
   getEmpleadoByIdUsuario(idUsuario: number) {
     return this.http.get(`${environment.apiUrl}/empleados/usuario/${idUsuario}`, this.headersService.getHeaders());
+  }
+
+  getEmpleadosByFilter(filter: EmpleadoFilter) {
+    filter.idEmpresa = this.idEmpresa;
+    return this.http.post(`${environment.apiUrl}/empleados/filter`, filter, this.headersService.getHeaders());
   }
 
   setEmpleado(empleado: Empleado) {

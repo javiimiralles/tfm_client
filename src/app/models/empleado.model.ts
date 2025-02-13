@@ -22,7 +22,10 @@ export class Empleado {
     public idRespModif?: number,
     public fechaModif?: Date,
     public idRespBaja?: number,
-    public fechaBaja?: Date
+    public fechaBaja?: Date,
+
+    public email?: string,
+    public rol?: string,
   ) {
   }
 }
