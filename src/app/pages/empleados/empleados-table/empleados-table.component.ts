@@ -9,6 +9,8 @@ import {formatDate} from '../../../utils/date.util';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterLink} from '@angular/router';
 import {NgClass} from '@angular/common';
+import {Rol} from '../../../models/rol.model';
+import {RolesService} from '../../../services/roles.service';
 
 @Component({
   selector: 'app-empleados-table',
@@ -25,6 +27,7 @@ import {NgClass} from '@angular/common';
 export class EmpleadosTableComponent implements OnInit{
 
   empleados: Empleado[] = [];
+  roles: Rol[] = [];
   pageNumber: number = 0;
   pageSize: number = 10;
   totalElements: number = 0;
@@ -42,11 +45,14 @@ export class EmpleadosTableComponent implements OnInit{
   constructor(
     private usuariosService: UsuariosService,
     private empleadosService: EmpleadosService,
-    private alertsService: AlertsService
+    private alertsService: AlertsService,
+    private rolesService: RolesService
   ) { }
 
   ngOnInit() {
     if (!this.checkPermissions()) return;
+
+    this.loadRoles();
 
     this.filtersSubject.pipe(debounceTime(500)).subscribe(() => {
       this.loadEmpleados();
@@ -68,6 +74,17 @@ export class EmpleadosTableComponent implements OnInit{
         this.alertsService.showError(err.error.message);
       }
     });
+  }
+
+  loadRoles() {
+    this.rolesService.getRoles().subscribe({
+      next: (res) => {
+        this.roles = res['data'];
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al cargar los roles', err);
+      }
+    })
   }
 
   onFilterChange() {

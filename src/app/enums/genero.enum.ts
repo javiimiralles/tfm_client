@@ -1,5 +1,5 @@
 export enum GeneroEnum {
-  HOME = 'Hombre',
+  HOMBRE = 'Hombre',
   MUJER = 'Mujer',
   OTRO = 'Otro'
 }

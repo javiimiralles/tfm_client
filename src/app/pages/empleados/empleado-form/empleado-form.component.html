@@ -1,0 +1,204 @@
+<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ cardTitle }}</h2>
+
+  <!-- Tab buttons -->
+  <div class="text-sm font-medium text-center text-gray-500 border-b border-gray-200 dark:text-gray-400 dark:border-gray-700 mb-6">
+    <ul class="flex flex-wrap -mb-px">
+      <li class="me-2">
+        <button
+          id="datosBasicosTab"
+          class="tab cursor-pointer inline-block p-4 text-indigo-600 border-b-2 border-indigo-600 rounded-t-lg active dark:text-indigo-500 dark:border-indigo-500"
+          (click)="onChangeTab('datosBasicosTab')">
+          Datos básicos
+        </button>
+      </li>
+      <li class="me-2">
+        <button
+          id="direccionTab"
+          class="tab cursor-pointer inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          (click)="onChangeTab('direccionTab')">
+          Dirección
+        </button>
+      </li>
+      <li class="me-2">
+        <button
+          id="infoUsuarioTab"
+          class="tab cursor-pointer inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300"
+          (click)="onChangeTab('infoUsuarioTab')">
+          Información de usuario
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Tab Datos Basicos -->
+  @if (activeTab === 'datosBasicosTab') {
+    <form [formGroup]="datosBasicosForm">
+      <div class="grid gap-4 mb-6 md:grid-cols-2">
+        <div>
+          <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': datosBasicosForm.get('nombre')?.invalid && datosBasicosForm.get('nombre')?.touched }">Nombre *</label>
+          <input type="text" id="nombre"
+                 formControlName="nombre"
+                 maxlength="150"
+                 [ngClass]="{ 'border-red-600': datosBasicosForm.get('nombre')?.invalid && datosBasicosForm.get('nombre')?.touched }"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+          @if (datosBasicosForm.get('nombre')?.invalid && datosBasicosForm.get('nombre')?.touched) {
+            @if (datosBasicosForm.get('nombre')?.errors?.['required']) {
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">El nombre es obligatorio</p>
+            }
+          }
+        </div>
+        <div>
+          <label for="apellidos" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Apellidos</label>
+          <input type="text" id="apellidos"
+                 formControlName="apellidos"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+      </div>
+      <div class="grid gap-4 mb-6 md:grid-cols-2">
+        <div>
+          <label for="nif" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">NIF</label>
+          <input type="text" id="nif"
+                 formControlName="nif"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+        <div>
+          <label for="fechaNacimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Fecha nacimiento</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <span class="material-symbols-outlined text-gray-400 dark:text-white">
+                calendar_month
+              </span>
+            </div>
+            <input
+              id="fechaNacimiento"
+              type="text"
+              formControlName="fechaNacimiento"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+          </div>
+        </div>
+        <div>
+          <label for="genero" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Género</label>
+          <select id="genero" formControlName="genero" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+            @for (genero of generos; track $index) {
+              <option value="{{ genero }}">{{ genero }}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label for="telefono" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Teléfono</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400 text-sm dark:text-white">
+              phone
+            </span>
+            </div>
+            <input type="text" id="telefono"
+                   formControlName="telefono"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+          </div>
+        </div>
+      </div>
+    </form>
+  }
+
+  <!-- Tab Direccion -->
+  @if (activeTab === 'direccionTab') {
+    <form [formGroup]="direccionForm">
+      <div class="grid gap-4 mb-6 md:grid-cols-3">
+        <div>
+          <label for="pais" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">País</label>
+          <select id="pais" formControlName="pais" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+            @for (pais of paises; track pais.id) {
+              <option value="{{pais.id}}">{{pais.nombre}}</option>
+            }
+          </select>
+        </div>
+        <div>
+          <label for="provincia" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Provincia</label>
+          <input type="text" id="provincia"
+                 formControlName="provincia"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+        <div>
+          <label for="poblacion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Población</label>
+          <input type="text" id="poblacion"
+                 formControlName="poblacion"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+      </div>
+      <div class="grid gap-4 mb-6 md:grid-cols-3">
+        <div class="col-span-2">
+          <label for="direccion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Dirección</label>
+          <input type="text" id="direccion"
+                 formControlName="direccion"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+        <div>
+          <label for="codigoPostal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Código Postal</label>
+          <input type="text" id="codigoPostal"
+                 formControlName="codigoPostal"
+                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+        </div>
+      </div>
+    </form>
+  }
+
+  <!-- Tab Informacion de Usuario -->
+  @if (activeTab === 'infoUsuarioTab') {
+    <form [formGroup]="infoUsuarioForm">
+      <div class="grid gap-4 mb-6 md:grid-cols-2">
+        <div>
+          <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email *</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
+            <span class="material-symbols-outlined text-gray-400 text-sm dark:text-white">
+              mail
+            </span>
+            </div>
+            <input type="email" id="email"
+                   formControlName="email"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+                   placeholder="johnsmith@example.com" required>
+          </div>
+        </div>
+        <div>
+          <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contraseña *</label>
+          <div class="relative w-full">
+            <input
+              type="text"
+              id="password"
+              formControlName="password"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500"
+              required />
+            <button type="button" title="Autogenerar contraseña" (click)="generateRandomPassword()" class="absolute cursor-pointer top-0 end-0 p-2.5 h-full text-sm font-medium text-white bg-indigo-700 rounded-e-lg border border-blue-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 dark:bg-indigo-600 dark:hover:bg-indigo-700 dark:focus:ring-indigo-800">
+              <span class="material-symbols-outlined">
+                manufacturing
+              </span>
+            </button>
+          </div>
+        </div>
+        <div>
+          <label for="rol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol *</label>
+          <select id="rol" formControlName="rol" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+            @for (rol of roles; track rol.id) {
+              <option value="{{rol.id}}">{{rol.nombre}}</option>
+            }
+          </select>
+        </div>
+      </div>
+    </form>
+  }
+
+  <div class="flex items-center justify-between">
+    <a href="#" [routerLink]="['/user/empleados-table']" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+      <svg class="w-4 h-4 me-1 transform scale-x-[-1]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      </svg>
+      Volver atrás
+    </a>
+    <button type="submit" (click)="onSubmit()" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+      Guardar
+    </button>
+  </div>
+</div>

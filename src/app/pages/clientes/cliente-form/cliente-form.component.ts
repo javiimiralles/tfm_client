@@ -31,6 +31,7 @@ export class ClienteFormComponent implements OnInit {
     codigoPostal: new FormControl('', [Validators.maxLength(5)]),
   });
 
+  cardTitle: string = 'Crear un nuevo cliente';
   cliente: Cliente;
   paises: Pais[] = [];
 
@@ -47,6 +48,7 @@ export class ClienteFormComponent implements OnInit {
     const id = this.activatedRoute.snapshot.params['id'];
     if (id && id !== 'new') {
       if (!this.checkPermissions('EDICION_CLIENTES')) return;
+      this.cardTitle = 'Editar cliente';
       this.loadCliente(id);
     } else if(!this.checkPermissions('CREACION_CLIENTES')) {
       return;
@@ -54,7 +56,20 @@ export class ClienteFormComponent implements OnInit {
     this.loadPaises();
   }
 
-  loadPaises() {
+  onSubmit() {
+    if (this.clientForm.invalid) {
+      this.clientForm.markAllAsTouched();
+      return;
+    }
+
+    if (this.cliente) {
+      this.updateCliente();
+    } else {
+      this.createCliente();
+    }
+  }
+
+  private loadPaises() {
     this.paisesService.getPaises().subscribe({
       next: (res) => {
         this.paises = res['data'];
@@ -65,7 +80,7 @@ export class ClienteFormComponent implements OnInit {
     })
   }
 
-  loadCliente(id: number) {
+  private loadCliente(id: number) {
     this.clientesService.getClienteById(id).subscribe({
       next: (res) => {
         if (!res['data']) {
@@ -83,20 +98,7 @@ export class ClienteFormComponent implements OnInit {
     })
   }
 
-  onSubmit() {
-    if (this.clientForm.invalid) {
-      this.clientForm.markAllAsTouched();
-      return;
-    }
-
-    if (this.cliente) {
-      this.updateCliente();
-    } else {
-      this.createCliente();
-    }
-  }
-
-  createCliente() {
+  private createCliente() {
     this.cliente = this.clientForm.value;
     this.cliente.pais = this.clientForm.get('pais').value != null
       ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
@@ -112,20 +114,8 @@ export class ClienteFormComponent implements OnInit {
     });
   }
 
-  updateCliente() {
-    this.cliente.nombre = this.clientForm.get('nombre').value;
-    this.cliente.apellidos = this.clientForm.get('apellidos').value;
-    this.cliente.nif = this.clientForm.get('nif').value;
-    this.cliente.email = this.clientForm.get('email').value;
-    this.cliente.telefono = this.clientForm.get('telefono').value;
-    this.cliente.pais = this.clientForm.get('pais').value != null
-      ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
-      : null;
-    this.cliente.provincia = this.clientForm.get('provincia').value;
-    this.cliente.poblacion = this.clientForm.get('poblacion').value;
-    this.cliente.direccion = this.clientForm.get('direccion').value;
-    this.cliente.codigoPostal = this.clientForm.get('codigoPostal').value;
-
+  private updateCliente() {
+    this.fillObject();
     this.clientesService.updateCliente(this.cliente).subscribe({
       next: (res) => {
         this.alertsService.showAlert('Cliente actualizado', 'El cliente se ha actualizado correctamente', 'success');
@@ -137,7 +127,7 @@ export class ClienteFormComponent implements OnInit {
     });
   }
 
-  fillForm() {
+  private fillForm() {
     this.clientForm.patchValue({
       nombre: this.cliente.nombre,
       apellidos: this.cliente.apellidos,
@@ -152,7 +142,22 @@ export class ClienteFormComponent implements OnInit {
     });
   }
 
-  checkPermissions(permission: string): boolean {
+  private fillObject() {
+    this.cliente.nombre = this.clientForm.get('nombre').value;
+    this.cliente.apellidos = this.clientForm.get('apellidos').value;
+    this.cliente.nif = this.clientForm.get('nif').value;
+    this.cliente.email = this.clientForm.get('email').value;
+    this.cliente.telefono = this.clientForm.get('telefono').value;
+    this.cliente.pais = this.clientForm.get('pais').value != null
+      ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
+      : null;
+    this.cliente.provincia = this.clientForm.get('provincia').value;
+    this.cliente.poblacion = this.clientForm.get('poblacion').value;
+    this.cliente.direccion = this.clientForm.get('direccion').value;
+    this.cliente.codigoPostal = this.clientForm.get('codigoPostal').value;
+  }
+
+  private checkPermissions(permission: string): boolean {
     if (!this.usuariosService.hasPermission(permission)) {
       this.alertsService.showError('No tienes permisos para acceder a esta página');
       this.usuariosService.logout();
