@@ -8,7 +8,10 @@ import {environment} from '../../environments/environment';
 })
 export class PaisesService {
 
-  constructor(private http: HttpClient, private headersService: HeadersService) { }
+  constructor(
+    private readonly http: HttpClient,
+    private readonly headersService: HeadersService
+  ) { }
 
   getPaises() {
     return this.http.get(`${environment.apiUrl}/paises`, this.headersService.getHeaders());

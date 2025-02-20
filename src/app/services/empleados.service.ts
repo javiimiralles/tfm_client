@@ -12,7 +12,10 @@ export class EmpleadosService {
 
   private empleado: Empleado;
 
-  constructor(private http: HttpClient, private headersService: HeadersService) { }
+  constructor(
+    private readonly http: HttpClient,
+    private readonly headersService: HeadersService
+  ) { }
 
   getEmpleadoById(idEmpleado: number) {
     return this.http.get(`${environment.apiUrl}/empleados/${idEmpleado}`, this.headersService.getHeaders());

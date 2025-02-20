@@ -35,9 +35,9 @@ export class ClientesTableComponent implements OnInit {
   filtersSubject = new BehaviorSubject<ClienteFilter>(new ClienteFilter());
 
   constructor(
-    private usuariosService: UsuariosService,
-    private clientesService: ClientesService,
-    private alertsService: AlertsService
+    private readonly usuariosService: UsuariosService,
+    private readonly clientesService: ClientesService,
+    private readonly alertsService: AlertsService
   ) { }
 
   ngOnInit() {

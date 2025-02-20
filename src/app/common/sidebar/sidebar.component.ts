@@ -29,7 +29,7 @@ export class SidebarComponent {
       { title: 'Inventario', icon: 'store',
         isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') || usuariosService.hasPermission('ACCESO_CATEGORIAS'),
         children: [
-          { title: 'Productos', link: '/user/inventario/productos', isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') },
+          { title: 'Productos', link: '/user/inventario/productos/productos-view', isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') },
           { title: 'Categorías', link: '/user/inventario/categorias', isAllowed: usuariosService.hasPermission('ACCESO_CATEGORIAS_PRODUCTOS') },
         ]}
     ]

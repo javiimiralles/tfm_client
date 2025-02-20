@@ -4,8 +4,8 @@ import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
   providedIn: 'root'
 })
 export class AlertsService {
-  private renderer!: Renderer2;
-  private duration = 5000;
+  private readonly renderer!: Renderer2;
+  private readonly duration = 5000;
 
   colors = {
     info: {

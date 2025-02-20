@@ -11,7 +11,11 @@ import {ClienteFilter} from '../filters/cliente.filter';
 })
 export class ClientesService {
 
-  constructor(private http: HttpClient, private headersService: HeadersService, private empleadosService: EmpleadosService) { }
+  constructor(
+    private readonly http: HttpClient,
+    private readonly headersService: HeadersService,
+    private readonly empleadosService: EmpleadosService
+  ) { }
 
   getClienteById(id: number) {
     return this.http.get(`${environment.apiUrl}/clientes/${id}`, this.headersService.getHeaders());

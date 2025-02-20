@@ -17,10 +17,10 @@ export class UsuariosService {
   private usuario: Usuario;
 
   constructor(
-    private http: HttpClient,
-    private router: Router,
-    private headersService: HeadersService,
-    private empleadosService: EmpleadosService
+    private readonly http: HttpClient,
+    private readonly router: Router,
+    private readonly headersService: HeadersService,
+    private readonly empleadosService: EmpleadosService
   ) { }
 
   login(loginForm: LoginFormInterface) {

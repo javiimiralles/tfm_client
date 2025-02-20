@@ -1,11 +1,14 @@
+import {CategoriaProducto} from './categoria-producto.model';
+
 export class Producto {
   constructor(
     public id?: number,
     public idCategoria?: number,
+    public categoria?: CategoriaProducto | string,
     public idEmpresa?: number,
     public nombre?: string,
     public descripcion?: string,
-    public imagen?: string,
+    public imagenUrl?: string,
     public precioVenta?: number,
     public impuestoVenta?: number,
     public coste?: number,

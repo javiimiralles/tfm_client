@@ -9,6 +9,7 @@ import {ClientesTableComponent} from './pages/clientes/clientes-table/clientes-t
 import {ClienteFormComponent} from './pages/clientes/cliente-form/cliente-form.component';
 import {EmpleadosTableComponent} from './pages/empleados/empleados-table/empleados-table.component';
 import {EmpleadoFormComponent} from './pages/empleados/empleado-form/empleado-form.component';
+import {ProductosViewComponent} from './pages/inventario/productos/productos-view/productos-view.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -17,6 +18,7 @@ export const routes: Routes = [
     {path: 'empleado-form/:id', component: EmpleadoFormComponent, data: {title: 'Empleado'}},
     {path: 'clientes-table', component: ClientesTableComponent, data: {title: 'Clientes'}},
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
+    {path: 'inventario/productos/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
   ]},
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [
     {path: 'login', component: LoginComponent, data: {title: 'Login'}},

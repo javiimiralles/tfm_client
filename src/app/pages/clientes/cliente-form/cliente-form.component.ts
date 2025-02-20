@@ -36,12 +36,12 @@ export class ClienteFormComponent implements OnInit {
   paises: Pais[] = [];
 
   constructor(
-    private clientesService: ClientesService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute,
-    private alertsService: AlertsService,
-    private paisesService: PaisesService,
-    private usuariosService: UsuariosService
+    private readonly clientesService: ClientesService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly alertsService: AlertsService,
+    private readonly paisesService: PaisesService,
+    private readonly usuariosService: UsuariosService
   ) { }
 
   ngOnInit() {

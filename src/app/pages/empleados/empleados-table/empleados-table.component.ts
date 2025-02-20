@@ -43,10 +43,10 @@ export class EmpleadosTableComponent implements OnInit{
   filtersSubject = new BehaviorSubject<EmpleadoFilter>(new EmpleadoFilter());
 
   constructor(
-    private usuariosService: UsuariosService,
-    private empleadosService: EmpleadosService,
-    private alertsService: AlertsService,
-    private rolesService: RolesService
+    private readonly usuariosService: UsuariosService,
+    private readonly empleadosService: EmpleadosService,
+    private readonly alertsService: AlertsService,
+    private readonly rolesService: RolesService
   ) { }
 
   ngOnInit() {
@@ -71,7 +71,7 @@ export class EmpleadosTableComponent implements OnInit{
         this.totalPages = res['data']?.totalPages;
       },
       error: (err) => {
-        this.alertsService.showError(err.error.message);
+        this.alertsService.showError('Error al cargar los empleados', err);
       }
     });
   }

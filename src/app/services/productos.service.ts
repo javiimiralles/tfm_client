@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {EmpleadosService} from './empleados.service';
-import {environment} from '../../environments/environment';
 import {HeadersService} from './headers.service';
+import {EmpleadosService} from './empleados.service';
+import {ProductoFilter} from '../filters/producto.filter';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
-export class RolesService {
+export class ProductosService {
 
   constructor(
     private readonly http: HttpClient,
@@ -15,8 +16,8 @@ export class RolesService {
     private readonly empleadosService: EmpleadosService
   ) { }
 
-  getRoles() {
-    const idEmpresa = this.empleadosService.idEmpresa;
-    return this.http.get(`${environment.apiUrl}/roles/empresa/${idEmpresa}`, this.headersService.getHeaders())
+  getProductosByFilter(filter: ProductoFilter) {
+    filter.idEmpresa = this.empleadosService.idEmpresa;
+    return this.http.post(`${environment.apiUrl}/productos/filter`, filter, this.headersService.getHeaders());
   }
 }

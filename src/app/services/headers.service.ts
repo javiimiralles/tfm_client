@@ -9,7 +9,7 @@ export class HeadersService {
 
   private usuariosService: UsuariosService;
 
-  constructor(private injector: Injector) { }
+  constructor(private readonly injector: Injector) { }
 
   getHeaders() {
     if (!this.usuariosService) {
