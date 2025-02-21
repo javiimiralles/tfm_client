@@ -117,11 +117,7 @@ export class EmpleadosTableComponent implements OnInit{
   }
 
   private checkPermissions(): boolean {
-    if (!this.usuariosService.hasPermission('ACCESO_EMPLEADOS')) {
-      this.alertsService.showError('No tienes permisos para acceder a esta página');
-      this.usuariosService.logout();
-      return false;
-    }
+    if (!this.usuariosService.checkPermissions('ACCESO_EMPLEADOS')) return false;
 
     this.showCreateButton = this.usuariosService.hasPermission('CREACION_EMPLEADOS');
     this.showEditButton = this.usuariosService.hasPermission('EDICION_EMPLEADOS');

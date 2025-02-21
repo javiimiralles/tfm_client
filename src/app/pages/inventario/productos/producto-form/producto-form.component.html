@@ -1,0 +1,166 @@
+<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ cardTitle }}</h2>
+  <div class="grid gap-6 grid-cols-3 mb-6">
+    <div>
+      <div class="flex items-center justify-center w-full">
+        @if (imagenUrl) {
+          <div class="relative w-full h-64">
+            <img [src]="imagenUrl" alt="producto" class="w-full h-full object-cover rounded-lg shadow-md">
+            <button
+              (click)="removeImage()"
+              class="absolute -top-3 -left-3 cursor-pointer bg-red-600 opacity-85 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm shadow-md hover:bg-red-800">
+              <span class="material-symbols-outlined">
+                close
+              </span>
+            </button>
+          </div>
+        } @else {
+          <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:hover:bg-gray-800 dark:bg-gray-700 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+              <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+              </svg>
+              <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"> Haz click o arrastra la imagen</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">PNG o JPG</p>
+            </div>
+            <input id="dropzone-file" type="file" class="hidden" (change)="onFileSelected($event)" />
+          </label>
+        }
+      </div>
+    </div>
+    <div class="col-span-2">
+      <form [formGroup]="productoForm">
+        <div class="grid gap-4 mb-4.5 md:grid-cols-5">
+          <div class="col-span-2">
+            <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched }">Nombre *</label>
+            <input type="text" id="nombre"
+                   formControlName="nombre"
+                   maxlength="150"
+                   [ngClass]="{ 'border-red-600': productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched }"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+            @if (productoForm.get('nombre')?.invalid && productoForm.get('nombre')?.touched) {
+              @if (productoForm.get('nombre')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El nombre es obligatorio</p>
+              }
+            }
+          </div>
+          <div class="col-span-2">
+            <label for="categoria" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Categoría</label>
+            <select id="categoria" formControlName="categoria" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+              @for (categoria of categorias; track categoria.id) {
+                <option value="{{ categoria.id }}">{{ categoria.nombre }}</option>
+              }
+            </select>
+          </div>
+          <div>
+            <label for="stock" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched }">Stock *</label>
+            <input type="number" id="stock"
+                   formControlName="stock"
+                   [ngClass]="{ 'border-red-600': productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched }"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+            @if (productoForm.get('stock')?.invalid && productoForm.get('stock')?.touched) {
+              @if (productoForm.get('stock')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El stock es obligatorio</p>
+              }
+            }
+          </div>
+        </div>
+        <div class="mb-4.5">
+          <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+          <textarea id="descripcion" formControlName="descripcion" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Escribe una descripción del producto..."></textarea>
+        </div>
+        <div class="grid gap-4 mb-4.5 md:grid-cols-4">
+          <div>
+            <label for="precioVenta" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('precioVenta')?.invalid && productoForm.get('precioVenta')?.touched }">Precio *</label>
+            <div class="relative">
+              <input type="number" id="precioVenta"
+                     formControlName="precioVenta"
+                     [ngClass]="{ 'border-red-600': productoForm.get('precioVenta')?.invalid && productoForm.get('precioVenta')?.touched }"
+                     (change)="calculatePrecioVentaConImpuesto()"
+                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+              <div class="absolute text-gray-400 inset-y-0 flex items-center ps-3.5 pointer-events-none">€</div>
+            </div>
+            @if (productoForm.get('precioVenta')?.invalid && productoForm.get('precioVenta')?.touched) {
+              @if (productoForm.get('precioVenta')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El precio es obligatorio</p>
+              }
+            }
+          </div>
+          <div>
+            <label for="impuestoVenta" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('impuestoVenta')?.invalid && productoForm.get('impuestoVenta')?.touched }">Impuesto de venta *</label>
+            <div class="relative">
+              <input type="number" id="impuestoVenta"
+                     formControlName="impuestoVenta"
+                     [ngClass]="{ 'border-red-600': productoForm.get('impuestoVenta')?.invalid && productoForm.get('impuestoVenta')?.touched }"
+                     (change)="calculatePrecioVentaConImpuesto()"
+                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+              <div class="absolute text-gray-400 inset-y-0 flex items-center ps-3.5 pointer-events-none">%</div>
+            </div>
+            @if (productoForm.get('impuestoVenta')?.invalid && productoForm.get('impuestoVenta')?.touched) {
+              @if (productoForm.get('impuestoVenta')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El impuesto de venta es obligatorio</p>
+              }
+            }
+          </div>
+          <div class="col-span-2 pt-8 text-gray-800">
+            Precio de venta con impuesto: <span class="font-semibold">{{ precioVentaConImpuesto }} €</span>
+          </div>
+        </div>
+        <div class="grid gap-4 mb-4.5 md:grid-cols-4">
+          <div>
+            <label for="coste" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('coste')?.invalid && productoForm.get('coste')?.touched }">Coste *</label>
+            <div class="relative">
+              <input type="number" id="coste"
+                     formControlName="coste"
+                     [ngClass]="{ 'border-red-600': productoForm.get('coste')?.invalid && productoForm.get('coste')?.touched }"
+                     (change)="calculatePrecioCompraConImpuesto()"
+                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+              <div class="absolute text-gray-400 inset-y-0 flex items-center ps-3.5 pointer-events-none">€</div>
+            </div>
+            @if (productoForm.get('coste')?.invalid && productoForm.get('coste')?.touched) {
+              @if (productoForm.get('coste')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El coste es obligatorio</p>
+              }
+            }
+          </div>
+          <div>
+            <label for="impuestoCompra" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': productoForm.get('impuestoCompra')?.invalid && productoForm.get('impuestoCompra')?.touched }">Impuesto de compra *</label>
+            <div class="relative">
+              <input type="number" id="impuestoCompra"
+                     formControlName="impuestoCompra"
+                     [ngClass]="{ 'border-red-600': productoForm.get('impuestoCompra')?.invalid && productoForm.get('impuestoCompra')?.touched }"
+                     (change)="calculatePrecioCompraConImpuesto()"
+                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+              <div class="absolute text-gray-400 inset-y-0 flex items-center ps-3.5 pointer-events-none">%</div>
+            </div>
+            @if (productoForm.get('impuestoCompra')?.invalid && productoForm.get('impuestoCompra')?.touched) {
+              @if (productoForm.get('impuestoCompra')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El impuesto de compra es obligatorio</p>
+              }
+            }
+          </div>
+          <div class="col-span-2 pt-8 text-gray-800">
+            Coste con impuesto: <span class="font-semibold">{{ precioCompraConImpuesto }} €</span>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="flex items-center justify-between">
+    <a href="#" [routerLink]="['/user/inventario/productos/productos-view']" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+      <svg class="w-4 h-4 me-1 transform scale-x-[-1]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+      </svg>
+      Volver atrás
+    </a>
+    <button type="submit" (click)="onSubmit()" [disabled]="loading" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+      @if (loading) {
+        <svg aria-hidden="true" class="inline w-4 h-4 me-3 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
+          <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentColor"/>
+        </svg>
+      }
+      Guardar
+    </button>
+  </div>
+</div>

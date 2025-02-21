@@ -83,11 +83,7 @@ export class ProductosViewComponent implements OnInit {
   }
 
   private checkPermissions(): boolean {
-    if (!this.usuariosService.hasPermission('ACCESO_PRODUCTOS')) {
-      this.alertsService.showError('No tienes permisos para acceder a esta página');
-      this.usuariosService.logout();
-      return false;
-    }
+    if (!this.usuariosService.checkPermissions('ACCESO_PRODUCTOS')) return false;
 
     this.showCreateButton = this.usuariosService.hasPermission('CREACION_PRODUCTOS');
     this.showEditButton = this.usuariosService.hasPermission('EDICION_PRODUCTOS');

@@ -47,10 +47,10 @@ export class ClienteFormComponent implements OnInit {
   ngOnInit() {
     const id = this.activatedRoute.snapshot.params['id'];
     if (id && id !== 'new') {
-      if (!this.checkPermissions('EDICION_CLIENTES')) return;
+      if (!this.usuariosService.checkPermissions('EDICION_CLIENTES')) return;
       this.cardTitle = 'Editar cliente';
       this.loadCliente(id);
-    } else if(!this.checkPermissions('CREACION_CLIENTES')) {
+    } else if(!this.usuariosService.checkPermissions('CREACION_CLIENTES')) {
       return;
     }
     this.loadPaises();
@@ -155,14 +155,5 @@ export class ClienteFormComponent implements OnInit {
     this.cliente.poblacion = this.clientForm.get('poblacion').value;
     this.cliente.direccion = this.clientForm.get('direccion').value;
     this.cliente.codigoPostal = this.clientForm.get('codigoPostal').value;
-  }
-
-  private checkPermissions(permission: string): boolean {
-    if (!this.usuariosService.hasPermission(permission)) {
-      this.alertsService.showError('No tienes permisos para acceder a esta página');
-      this.usuariosService.logout();
-      return false;
-    }
-    return true;
   }
 }

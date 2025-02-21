@@ -95,11 +95,7 @@ export class ClientesTableComponent implements OnInit {
   }
 
   private checkPermissions(): boolean {
-    if (!this.usuariosService.hasPermission('ACCESO_CLIENTES')) {
-      this.alertsService.showError('No tienes permisos para acceder a esta página');
-      this.usuariosService.logout();
-      return false;
-    }
+    if (!this.usuariosService.checkPermissions('ACCESO_CLIENTES')) return false;
 
     this.showCreateButton = this.usuariosService.hasPermission('CREACION_CLIENTES');
     this.showEditButton = this.usuariosService.hasPermission('EDICION_CLIENTES');

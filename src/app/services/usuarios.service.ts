@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { HeadersService } from './headers.service';
 import { EmpleadosService } from './empleados.service';
 import { cleanLocalStorage } from '../utils/local-storage.util';
+import {AlertsService} from './alerts.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +21,8 @@ export class UsuariosService {
     private readonly http: HttpClient,
     private readonly router: Router,
     private readonly headersService: HeadersService,
-    private readonly empleadosService: EmpleadosService
+    private readonly empleadosService: EmpleadosService,
+    private readonly alertsService: AlertsService
   ) { }
 
   login(loginForm: LoginFormInterface) {
@@ -47,6 +49,15 @@ export class UsuariosService {
 
   validateNoToken() {
     return this.validate(false, true);
+  }
+
+  checkPermissions(permission: string): boolean {
+    if (!this.hasPermission(permission)) {
+      this.alertsService.showError('No tienes permisos para acceder a esta página');
+      this.logout();
+      return false;
+    }
+    return true;
   }
 
   hasPermission(permiso: string) {

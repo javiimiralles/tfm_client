@@ -69,10 +69,10 @@ export class EmpleadoFormComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const id = this.activatedRoute.snapshot.params['id'];
     if (id && id !== 'new') {
-      if (!this.checkPermissions('EDICION_CLIENTES')) return;
-      this.cardTitle = 'Editar cliente';
+      if (!this.usuariosService.checkPermissions('EDICION_EMPLEADOS')) return;
+      this.cardTitle = 'Editar empleado';
       this.loadEmpleado(id);
-    } else if(!this.checkPermissions('CREACION_CLIENTES')) {
+    } else if(!this.usuariosService.checkPermissions('CREACION_EMPLEADOS')) {
       return;
     }
     this.loadRoles();
@@ -205,15 +205,6 @@ export class EmpleadoFormComponent implements OnInit, AfterViewInit {
       password: '',
       rol: this.empleado.rol,
     });
-  }
-
-  private checkPermissions(permission: string): boolean {
-    if (!this.usuariosService.hasPermission(permission)) {
-      this.alertsService.showError('No tienes permisos para acceder a esta página');
-      this.usuariosService.logout();
-      return false;
-    }
-    return true;
   }
 
 }
