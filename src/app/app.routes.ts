@@ -11,6 +11,7 @@ import {EmpleadosTableComponent} from './pages/empleados/empleados-table/emplead
 import {EmpleadoFormComponent} from './pages/empleados/empleado-form/empleado-form.component';
 import {ProductosViewComponent} from './pages/inventario/productos/productos-view/productos-view.component';
 import {ProductoFormComponent} from './pages/inventario/productos/producto-form/producto-form.component';
+import {CategoriasProductosTableComponent} from './pages/inventario/categorias/categorias-productos-table/categorias-productos-table.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -21,6 +22,7 @@ export const routes: Routes = [
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
     {path: 'inventario/productos/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/productos/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
+    {path: 'inventario/categorias/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},
   ]},
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [
     {path: 'login', component: LoginComponent, data: {title: 'Login'}},

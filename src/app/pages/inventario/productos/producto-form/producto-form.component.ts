@@ -8,6 +8,7 @@ import {UsuariosService} from '../../../../services/usuarios.service';
 import {CategoriaProducto} from '../../../../models/categoria-producto.model';
 import {CategoriasProductoService} from '../../../../services/categorias-producto.service';
 import {NgClass} from '@angular/common';
+import {CategoriaProductoFilter} from '../../../../filters/categoria-producto.filter';
 
 @Component({
   selector: 'app-producto-form',
@@ -157,9 +158,9 @@ export class ProductoFormComponent implements OnInit {
   }
 
   private loadCategorias() {
-    this.categoriasProductoService.getCategoriasProducto().subscribe({
+    this.categoriasProductoService.getCategoriasProductoByFilter(new CategoriaProductoFilter()).subscribe({
       next: (res: any) => {
-        this.categorias = res['data'];
+        this.categorias = res['data']?.content;
       },
       error: (err) => {
         this.alertsService.showError('No se han podido cargar las categorías de producto', err);
@@ -179,6 +180,7 @@ export class ProductoFormComponent implements OnInit {
       stock: this.producto.stock
     })
 
+    console.log(this.producto);
     if (this.producto.imagenUrl) {
       this.imagenUrl = this.producto.imagenUrl;
     }

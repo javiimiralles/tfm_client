@@ -30,7 +30,7 @@ export class SidebarComponent {
         isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') || usuariosService.hasPermission('ACCESO_CATEGORIAS'),
         children: [
           { title: 'Productos', link: '/user/inventario/productos/productos-view', isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') },
-          { title: 'Categorías', link: '/user/inventario/categorias', isAllowed: usuariosService.hasPermission('ACCESO_CATEGORIAS_PRODUCTOS') },
+          { title: 'Categorías', link: '/user/inventario/categorias/categorias-productos-table', isAllowed: usuariosService.hasPermission('ACCESO_CATEGORIAS_PRODUCTOS') },
         ]}
     ]
   }
