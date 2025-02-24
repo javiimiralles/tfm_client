@@ -6,17 +6,18 @@ import {UsuariosService} from '../../../../services/usuarios.service';
 import {AlertsService} from '../../../../services/alerts.service';
 import {CategoriasProductoService} from '../../../../services/categorias-producto.service';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {NgClass} from '@angular/common';
 import { Modal } from 'flowbite';
+import {ConfirmationModalComponent} from '../../../../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-categorias-productos-table',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    RouterLink,
-    NgClass
+    NgClass,
+    ConfirmationModalComponent
   ],
   templateUrl: './categorias-productos-table.component.html',
   standalone: true,
@@ -40,7 +41,10 @@ export class CategoriasProductosTableComponent implements OnInit{
   categoriaFilter: CategoriaProductoFilter = new CategoriaProductoFilter();
   filtersSubject = new BehaviorSubject<CategoriaProductoFilter>(new CategoriaProductoFilter());
 
-  // Modal
+  idCategoriaSeleccionada: number;
+  showDeleteModal: boolean = false;
+
+  // Modal formulario
   modal: Modal;
 
   categoriaForm: FormGroup = new FormGroup({
@@ -81,7 +85,7 @@ export class CategoriasProductosTableComponent implements OnInit{
     }
   }
 
-  openModal(categoria: CategoriaProducto) {
+  openFormModal(categoria: CategoriaProducto) {
     this.fillForm(categoria);
     this.categoria = categoria;
     this.modalTitle = categoria ? 'Editar categoría' : 'Crear una nueva categoría';
@@ -95,8 +99,31 @@ export class CategoriasProductosTableComponent implements OnInit{
     if (this.modal) this.modal.hide();
   }
 
+  openDeleteModal(idCategoria: number) {
+    this.idCategoriaSeleccionada = idCategoria;
+    const deleteModal = document.getElementById('confirmation-modal');
+    if (!deleteModal) return;
+    this.modal = new Modal(deleteModal);
+    this.modal.show();
+  }
+
   onFilterChange() {
     this.filtersSubject.next(this.categoriaFilter);
+  }
+
+  deleteCategoria() {
+    if (this.idCategoriaSeleccionada !== null) {
+      this.categoriasProductoService.deleteCategoriaProducto(this.idCategoriaSeleccionada).subscribe({
+        next: () => {
+          this.alertsService.showAlert('Categoría eliminada', 'La categoría se ha eliminado correctamente', 'success');
+          this.closeModal();
+          this.loadCategorias();
+        },
+        error: (err) => {
+          this.alertsService.showError('Error al eliminar la categoría', err);
+        }
+      });
+    }
   }
 
   goToPage(page: number) {
@@ -140,7 +167,7 @@ export class CategoriasProductosTableComponent implements OnInit{
   private createCategoria() {
     this.fillObject();
     this.categoriasProductoService.createCategoriaProducto(this.categoria).subscribe({
-      next: (res) => {
+      next: () => {
         this.alertsService.showAlert('Categoría creada', 'La categoría se ha creado correctamente', 'success');
         this.closeModal();
         this.loadCategorias();
@@ -156,7 +183,7 @@ export class CategoriasProductosTableComponent implements OnInit{
   private updateCategoria() {
     this.fillObject();
     this.categoriasProductoService.updateCategoriaProducto(this.categoria).subscribe({
-      next: (res) => {
+      next: () => {
         this.alertsService.showAlert('Categoría actualizada', 'La categoría se ha actualizado correctamente', 'success');
         this.closeModal();
         this.loadCategorias();
@@ -201,6 +228,4 @@ export class CategoriasProductosTableComponent implements OnInit{
       this.dropdownStates = {};
     }
   }
-
-  protected readonly onsubmit = onsubmit;
 }

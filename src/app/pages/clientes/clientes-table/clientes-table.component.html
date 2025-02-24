@@ -67,12 +67,12 @@
                   <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
                     @if (showEditButton) {
                       <li>
-                        <a href="#" [routerLink]="['/user/cliente-form/', cliente.id]" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
+                        <a [routerLink]="['/user/cliente-form/', cliente.id]" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
                       </li>
                     }
                     @if (showDeleteButton) {
                       <li>
-                        <a href="#" class="block py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Eliminar</a>
+                        <a (click)="openDeleteModal(cliente.id)" class="block cursor-pointer py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Eliminar</a>
                       </li>
                     }
                   </ul>
@@ -122,4 +122,13 @@
     </ul>
   </nav>
 </div>
+
+<!-- Modal eliminacion -->
+<app-confirmation-modal
+  [message]="'¿Estás seguro de que quieres eliminar este cliente?'"
+  [confirmText]="'Eliminar'"
+  [confirmBtnType]="'danger'"
+  (onConfirm)="deleteCliente()"
+  (onCancel)="closeModal()">
+</app-confirmation-modal>
 

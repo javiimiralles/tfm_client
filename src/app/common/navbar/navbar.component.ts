@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, HostListener} from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
 import { EmpleadosService } from '../../services/empleados.service';
 
@@ -26,6 +26,15 @@ export class NavbarComponent{
 
   logout() {
     this.usuariosService.logout();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    const dropdown = document.getElementById('dropdown-user');
+    if (this.isDropdownOpen && dropdown && !dropdown.contains(target) && !target.closest('button')) {
+      this.isDropdownOpen = false;
+    }
   }
 
 }

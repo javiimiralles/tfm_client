@@ -23,7 +23,7 @@
     </div>
     @if (showCreateButton) {
       <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-        <button type="button" (click)="openModal(null)" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        <button type="button" (click)="openFormModal(null)" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
             <span class="material-symbols-outlined">
               add
             </span>
@@ -65,12 +65,12 @@
                   <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
                     @if (showEditButton) {
                       <li>
-                        <button (click)="openModal(categoria)" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</button>
+                        <a (click)="openFormModal(categoria)" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
                       </li>
                     }
                     @if (showDeleteButton) {
                       <li>
-                        <button class="block py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Eliminar</button>
+                        <a (click)="openDeleteModal(categoria.id)" class="block py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Eliminar</a>
                       </li>
                     }
                   </ul>
@@ -172,4 +172,13 @@
     </div>
   </div>
 </div>
+
+<!-- Modal eliminacion -->
+<app-confirmation-modal
+  [message]="'¿Estás seguro de que quieres eliminar esta categoría?'"
+  [confirmText]="'Eliminar'"
+  [confirmBtnType]="'danger'"
+  (onConfirm)="deleteCategoria()"
+  (onCancel)="closeModal()">
+</app-confirmation-modal>
 

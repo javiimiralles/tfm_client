@@ -34,4 +34,8 @@ export class CategoriasProductoService {
   updateCategoriaProducto(categoriaProducto: CategoriaProducto) {
     return this.http.put(`${environment.apiUrl}/categorias-productos/${categoriaProducto.id}`, categoriaProducto, this.headersService.getHeaders());
   }
+
+  deleteCategoriaProducto(id: number) {
+    return this.http.delete(`${environment.apiUrl}/categorias-productos/${id}`, this.headersService.getHeaders());
+  }
 }

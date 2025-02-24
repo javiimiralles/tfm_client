@@ -9,10 +9,12 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { BehaviorSubject, debounceTime } from 'rxjs';
 import {ClienteFilter} from '../../../filters/cliente.filter';
 import {NgClass} from '@angular/common';
+import {Modal} from 'flowbite';
+import {ConfirmationModalComponent} from '../../../components/confirmation-modal/confirmation-modal.component';
 
 @Component({
   selector: 'app-clientes-table',
-  imports: [RouterLink, ReactiveFormsModule, FormsModule, NgClass],
+  imports: [RouterLink, ReactiveFormsModule, FormsModule, NgClass, ConfirmationModalComponent],
   templateUrl: './clientes-table.component.html',
   standalone: true,
   styleUrl: './clientes-table.component.css'
@@ -33,6 +35,9 @@ export class ClientesTableComponent implements OnInit {
 
   clienteFilter: ClienteFilter = new ClienteFilter();
   filtersSubject = new BehaviorSubject<ClienteFilter>(new ClienteFilter());
+
+  deleteModal: Modal;
+  idClienteSeleccionado: number;
 
   constructor(
     private readonly usuariosService: UsuariosService,
@@ -63,6 +68,34 @@ export class ClientesTableComponent implements OnInit {
         this.alertsService.showError('Error al cargar los clientes', err);
       }
     })
+  }
+
+  openDeleteModal(idCliente: number) {
+    this.idClienteSeleccionado = idCliente;
+    const modalEl = document.getElementById('confirmation-modal');
+    if (!modalEl) return;
+    this.deleteModal = new Modal(modalEl);
+    console.log(this.deleteModal)
+    this.deleteModal.show();
+  }
+
+  closeModal() {
+    if (this.deleteModal) this.deleteModal.hide();
+  }
+
+  deleteCliente() {
+    if (this.idClienteSeleccionado !== null) {
+      this.clientesService.deleteCliente(this.idClienteSeleccionado).subscribe({
+        next: () => {
+          this.alertsService.showAlert('Cliente eliminado', 'El cliente se ha eliminado correctamente', 'success');
+          this.closeModal();
+          this.loadClientes();
+        },
+        error: (err) => {
+          this.alertsService.showError('Error al eliminar el cliente', err);
+        }
+      });
+    }
   }
 
   onFilterChange() {

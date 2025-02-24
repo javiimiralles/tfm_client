@@ -38,4 +38,8 @@ export class ClientesService {
   updateCliente(cliente: Cliente) {
     return this.http.put(`${environment.apiUrl}/clientes/${cliente.id}`, cliente, this.headersService.getHeaders());
   }
+
+  deleteCliente(id: number) {
+    return this.http.get(`${environment.apiUrl}/clientes/delete/${id}`, this.headersService.getHeaders());
+  }
 }
