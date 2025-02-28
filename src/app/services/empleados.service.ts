@@ -30,6 +30,15 @@ export class EmpleadosService {
     return this.http.post(`${environment.apiUrl}/empleados/filter`, filter, this.headersService.getHeaders());
   }
 
+  createEmpleado(empleado: Empleado, imagen: File) {
+    empleado.idEmpresa = this.idEmpresa;
+    const formData = new FormData();
+    formData.append('empleado', JSON.stringify(empleado));
+    formData.append('imagen', imagen);
+    return this.http.post(`${environment.apiUrl}/empleados`, formData, this.headersService.getHeaders());
+
+  }
+
   setEmpleado(empleado: Empleado) {
     this.empleado = empleado;
   }

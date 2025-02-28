@@ -85,6 +85,7 @@ export class EmpleadoFormComponent implements OnInit, AfterViewInit {
 
   onSubmit() {
     if (this.datosBasicosForm.invalid || this.direccionForm.invalid || this.infoUsuarioForm.invalid) {
+      console.log(this.datosBasicosForm);
       this.datosBasicosForm.markAllAsTouched();
       this.direccionForm.markAllAsTouched();
       this.infoUsuarioForm.markAllAsTouched();
@@ -170,7 +171,16 @@ export class EmpleadoFormComponent implements OnInit, AfterViewInit {
   }
 
   private createEmpleado() {
-
+    this.fillObject();
+    this.empleadosService.createEmpleado(this.empleado, null).subscribe({
+      next: () => {
+        this.alertsService.showAlert('Empleado creado', 'El empleado se ha creado correctamente', 'success');
+        this.router.navigate(['/user/empleados-table']);
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al crear el empleado', err);
+      }
+    })
   }
 
   private updateEmpleado() {
@@ -205,6 +215,32 @@ export class EmpleadoFormComponent implements OnInit, AfterViewInit {
       password: '',
       rol: this.empleado.rol,
     });
+  }
+
+  private fillObject() {
+    if (!this.empleado) this.empleado = new Empleado();
+    this.empleado.nombre = this.datosBasicosForm.get('nombre').value;
+    this.empleado.apellidos = this.datosBasicosForm.get('apellidos').value;
+    this.empleado.nif = this.datosBasicosForm.get('nif').value;
+    this.empleado.fechaNacimiento = this.datosBasicosForm.get('fechaNacimiento').value;
+    this.empleado.genero = this.datosBasicosForm.get('genero').value != null
+      ? GeneroEnum[this.datosBasicosForm.get('genero').value]
+      : null;
+    this.empleado.telefono = this.datosBasicosForm.get('telefono').value;
+
+    this.empleado.pais = this.direccionForm.get('pais').value != null
+      ? this.paises.find(pais => pais.id == Number.parseInt(this.direccionForm.get('pais').value))
+      : null;
+    this.empleado.provincia = this.direccionForm.get('provincia').value;
+    this.empleado.poblacion = this.direccionForm.get('poblacion').value;
+    this.empleado.direccion = this.direccionForm.get('direccion').value;
+    this.empleado.codigoPostal = this.direccionForm.get('codigoPostal').value;
+
+    this.empleado.email = this.infoUsuarioForm.get('email').value;
+    this.empleado.password = this.infoUsuarioForm.get('password').value;
+    this.empleado.rol = this.infoUsuarioForm.get('rol').value != null
+      ? this.roles.find(rol => rol.id == Number.parseInt(this.infoUsuarioForm.get('rol').value))
+      : null;
   }
 
 }

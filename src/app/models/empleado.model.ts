@@ -1,5 +1,6 @@
 import { GeneroEnum } from "../enums/genero.enum";
 import {Pais} from './pais.model';
+import {Rol} from './rol.model';
 
 export class Empleado {
   constructor(
@@ -24,8 +25,10 @@ export class Empleado {
     public idRespBaja?: number,
     public fechaBaja?: Date,
 
+    // Datos usuario
     public email?: string,
-    public rol?: string,
+    public password?: string,
+    public rol?: Rol,
   ) {
   }
 }
