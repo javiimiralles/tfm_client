@@ -53,29 +53,11 @@ export class ClientesTableComponent implements OnInit {
     });
   }
 
-  loadClientes() {
-    this.clienteFilter = this.filtersSubject.getValue();
-    this.clienteFilter.page = this.pageNumber;
-    this.clienteFilter.size = this.pageSize;
-
-    this.clientesService.getClientesByFilter(this.clienteFilter).subscribe({
-      next: (res) => {
-        this.clientes = res['data']?.content;
-        this.totalElements = res['data']?.totalElements;
-        this.totalPages = res['data']?.totalPages;
-      },
-      error: (err) => {
-        this.alertsService.showError('Error al cargar los clientes', err);
-      }
-    })
-  }
-
   openDeleteModal(idCliente: number) {
     this.idClienteSeleccionado = idCliente;
     const modalEl = document.getElementById('confirmation-modal');
     if (!modalEl) return;
     this.deleteModal = new Modal(modalEl);
-    console.log(this.deleteModal)
     this.deleteModal.show();
   }
 
@@ -125,6 +107,24 @@ export class ClientesTableComponent implements OnInit {
 
   formatDate(date: Date): string {
     return formatDate(date);
+  }
+
+
+  private loadClientes() {
+    this.clienteFilter = this.filtersSubject.getValue();
+    this.clienteFilter.page = this.pageNumber;
+    this.clienteFilter.size = this.pageSize;
+
+    this.clientesService.getClientesByFilter(this.clienteFilter).subscribe({
+      next: (res) => {
+        this.clientes = res['data']?.content;
+        this.totalElements = res['data']?.totalElements;
+        this.totalPages = res['data']?.totalPages;
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al cargar los clientes', err);
+      }
+    })
   }
 
   private checkPermissions(): boolean {

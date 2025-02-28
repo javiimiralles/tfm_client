@@ -40,6 +40,6 @@ export class ClientesService {
   }
 
   deleteCliente(id: number) {
-    return this.http.get(`${environment.apiUrl}/clientes/delete/${id}`, this.headersService.getHeaders());
+    return this.http.delete(`${environment.apiUrl}/clientes/${id}`, this.headersService.getHeaders());
   }
 }

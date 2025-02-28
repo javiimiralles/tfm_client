@@ -132,7 +132,7 @@ export class ProductoFormComponent implements OnInit {
     this.productosService.createProducto(this.producto, this.imagenFile).subscribe({
       next: (res: any) => {
         this.alertsService.showAlert('Producto creado', 'El producto se ha creado correctamente', 'success');
-        this.router.navigate(['/user/inventario/productos/productos-view']);
+        this.router.navigate(['/user/inventario/productos-view']);
         this.loading = false;
       },
       error: (err) => {
@@ -147,7 +147,7 @@ export class ProductoFormComponent implements OnInit {
     this.productosService.updateProducto(this.producto, this.imagenFile, this.imageChanged).subscribe({
       next: (res: any) => {
         this.alertsService.showAlert('Producto actualizado', 'El producto se ha actualizado correctamente', 'success');
-        this.router.navigate(['/user/inventario/productos/productos-view']);
+        this.router.navigate(['/user/inventario/productos-view']);
         this.loading = false;
       },
       error: (err) => {

@@ -25,12 +25,12 @@ export class SidebarComponent {
           { title: 'Presupuestos', link: '/user/ventas/presupuestos', isAllowed: usuariosService.hasPermission('ACCESO_PRESUPUESTOS') },
           { title: 'Facturas', link: '/user/ventas/facturas', isAllowed: usuariosService.hasPermission('ACCESO_FACTURAS') },
         ]},
-      { title: 'Proveedores', icon: 'local_shipping', link: '/user/proveedores', isAllowed: usuariosService.hasPermission('ACCESO_PROVEEDORES') },
+      { title: 'Proveedores', icon: 'local_shipping', link: '/user/proveedores-table', isAllowed: usuariosService.hasPermission('ACCESO_PROVEEDORES') },
       { title: 'Inventario', icon: 'store',
         isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') || usuariosService.hasPermission('ACCESO_CATEGORIAS'),
         children: [
-          { title: 'Productos', link: '/user/inventario/productos/productos-view', isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') },
-          { title: 'Categorías', link: '/user/inventario/categorias/categorias-productos-table', isAllowed: usuariosService.hasPermission('ACCESO_CATEGORIAS_PRODUCTOS') },
+          { title: 'Productos', link: '/user/inventario/productos-view', isAllowed: usuariosService.hasPermission('ACCESO_PRODUCTOS') },
+          { title: 'Categorías', link: '/user/inventario/categorias-productos-table', isAllowed: usuariosService.hasPermission('ACCESO_CATEGORIAS_PRODUCTOS') },
         ]}
     ]
   }

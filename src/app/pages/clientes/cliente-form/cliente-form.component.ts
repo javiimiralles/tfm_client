@@ -104,7 +104,7 @@ export class ClienteFormComponent implements OnInit {
       ? this.paises.find(pais => pais.id == Number.parseInt(this.clientForm.get('pais').value))
       : null;
     this.clientesService.createCliente(this.cliente).subscribe({
-      next: (res) => {
+      next: () => {
         this.alertsService.showAlert('Cliente creado', 'El cliente se ha creado correctamente', 'success');
         this.router.navigate(['/user/clientes-table']);
       },
@@ -117,7 +117,7 @@ export class ClienteFormComponent implements OnInit {
   private updateCliente() {
     this.fillObject();
     this.clientesService.updateCliente(this.cliente).subscribe({
-      next: (res) => {
+      next: () => {
         this.alertsService.showAlert('Cliente actualizado', 'El cliente se ha actualizado correctamente', 'success');
         this.router.navigate(['/user/clientes-table']);
       },

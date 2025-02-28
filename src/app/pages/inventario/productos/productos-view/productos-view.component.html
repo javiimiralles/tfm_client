@@ -24,7 +24,7 @@
   <div>
     @if (showCreateButton) {
       <div>
-        <button type="button" routerLink="/user/inventario/productos/producto-form/new" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        <button type="button" routerLink="/user/inventario/producto-form/new" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
             <span class="material-symbols-outlined">
               add
             </span>
@@ -38,7 +38,7 @@
 <div class="grid gap-4 lg:grid-cols-4 md:grid-cols-3">
   @if (!loading) {
     @for (producto of productos; track producto.id) {
-      <div [routerLink]="['/user/inventario/productos/producto-form/', producto.id]" class="w-full max-w-sm cursor-pointer bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col hover:shadow-xl transition duration-200">
+      <div [routerLink]="['/user/inventario/producto-form/', producto.id]" class="w-full max-w-sm cursor-pointer bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700 flex flex-col hover:shadow-xl transition duration-200">
         <div>
           <img class="rounded-t-lg w-full h-48 object-cover" src="{{ producto.imagenUrl ? producto.imagenUrl : '/images/no_product_image.jpg' }}" alt="{{ producto.nombre }}" loading="lazy" />
         </div>
