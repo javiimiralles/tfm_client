@@ -1,10 +1,14 @@
 import {Component, HostListener} from '@angular/core';
 import { UsuariosService } from '../../services/usuarios.service';
 import { EmpleadosService } from '../../services/empleados.service';
+import {CestaService} from '../../services/cesta.service';
+import {RouterLink} from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
+  imports: [
+    RouterLink
+  ],
   templateUrl: './navbar.component.html',
   standalone: true,
   styleUrl: './navbar.component.css'
@@ -14,10 +18,19 @@ export class NavbarComponent{
   email: string = '';
   nombre: string = '';
   isDropdownOpen: boolean = false;
+  showCesta: boolean = false;
+  showCestaIndicator: boolean = false;
 
-  constructor(private usuariosService: UsuariosService, private empleadosService: EmpleadosService) {
-    this.email = usuariosService.email!;
-    this.nombre = empleadosService.nombre!;
+  constructor(private usuariosService: UsuariosService, private empleadosService: EmpleadosService, private cestaService: CestaService) {
+    this.email = this.usuariosService.email!;
+    this.nombre = this.empleadosService.nombre!;
+
+    if (this.usuariosService.hasPermission('ACCESO_PEDIDOS_PROVEEDORES')) {
+      this.showCesta = true;
+      this.cestaService.cesta$.subscribe(cesta => {
+        this.showCestaIndicator = cesta.length > 0;
+      });
+    }
   }
 
   toggleDropdown() {

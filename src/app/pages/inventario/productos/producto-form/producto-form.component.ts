@@ -9,6 +9,11 @@ import {CategoriaProducto} from '../../../../models/categoria-producto.model';
 import {CategoriasProductoService} from '../../../../services/categorias-producto.service';
 import {NgClass} from '@angular/common';
 import {CategoriaProductoFilter} from '../../../../filters/categoria-producto.filter';
+import {Modal} from 'flowbite';
+import {CestaService} from '../../../../services/cesta.service';
+import {ProveedoresService} from '../../../../services/proveedores.service';
+import {Proveedor} from '../../../../models/proveedor.model';
+import {ProveedorFilter} from '../../../../filters/proveedor.filter';
 
 @Component({
   selector: 'app-producto-form',
@@ -46,13 +51,24 @@ export class ProductoFormComponent implements OnInit {
   loading: boolean = false;
   imageChanged: boolean = false;
 
+  // Modal realizar pedido
+  modal: Modal;
+  proveedores: Proveedor[] = [];
+
+  nuevoPedidoForm: FormGroup = new FormGroup({
+    proveedor: new FormControl('', [Validators.required]),
+    cantidad: new FormControl('', [Validators.required])
+  })
+
   constructor(
     private readonly router: Router,
     private readonly activatedRoute: ActivatedRoute,
     private readonly alertsService: AlertsService,
     private readonly productosService: ProductosService,
     private readonly usuariosService: UsuariosService,
-    private readonly categoriasProductoService: CategoriasProductoService
+    private readonly categoriasProductoService: CategoriasProductoService,
+    private readonly cestaService: CestaService,
+    private readonly proveedoresService: ProveedoresService
   ) {}
 
   ngOnInit(): void {
@@ -65,8 +81,6 @@ export class ProductoFormComponent implements OnInit {
       return;
     }
     this.loadCategorias();
-    this.calculatePrecioVentaConImpuesto();
-    this.calculatePrecioCompraConImpuesto();
   }
 
   onSubmit() {
@@ -115,14 +129,51 @@ export class ProductoFormComponent implements OnInit {
     this.precioCompraConImpuesto = parseFloat((coste * (1 + impuestoCompra / 100)).toFixed(2));
   }
 
+  // Logica del modal de realizar pedido
+  openModal() {
+    if (this.proveedores.length === 0) this.loadProveedores();
+    this.nuevoPedidoForm.reset();
+    this.modal = new Modal(document.getElementById('modal-realizar-pedido'));
+    this.modal.show();
+  }
+
+  closeModal() {
+    if (this.modal) this.modal.hide();
+  }
+
+  addProductoToCesta() {
+    if (this.nuevoPedidoForm.invalid) {
+      this.nuevoPedidoForm.markAllAsTouched();
+      return;
+    }
+
+    const proveedor = this.proveedores.find(proveedor => proveedor.id == this.nuevoPedidoForm.get('proveedor').value);
+    this.cestaService.addProducto(this.producto, proveedor, this.nuevoPedidoForm.get('cantidad').value);
+    this.closeModal();
+    this.alertsService.showAlert('Producto añadido a la cesta', 'El producto se ha añadido a la cesta correctamente', 'success');
+  }
+
   private loadProducto(id: number) {
     this.productosService.getProductoById(id).subscribe({
       next: (res: any) => {
         this.producto = res['data'];
         this.fillForm();
+        this.calculatePrecioVentaConImpuesto();
+        this.calculatePrecioCompraConImpuesto();
       },
       error: (err) => {
         this.alertsService.showError('No se ha podido cargar el producto', err);
+      }
+    })
+  }
+
+  private loadProveedores() {
+    this.proveedoresService.getProveedoresByFilter(new ProveedorFilter()).subscribe({
+      next: (res: any) => {
+        this.proveedores = res['data']?.content;
+      },
+      error: (err) => {
+        this.alertsService.showError('No se han podido cargar los proveedores', err);
       }
     })
   }
@@ -180,7 +231,6 @@ export class ProductoFormComponent implements OnInit {
       stock: this.producto.stock
     })
 
-    console.log(this.producto);
     if (this.producto.imagenUrl) {
       this.imagenUrl = this.producto.imagenUrl;
     }

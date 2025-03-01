@@ -15,11 +15,23 @@
         </button>
         <a href="https://flowbite.com" class="flex ms-2 md:me-24">
           <img src="https://flowbite.com/docs/images/logo.svg" class="h-8 me-3" alt="FlowBite Logo" />
-          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Flowbite</span>
+          <span class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Core</span>
         </a>
       </div>
       <div class="flex items-center">
-        <div class="flex items-center ms-3">
+        @if (showCesta) {
+          <div class="flex items-center ms-4 cursor-pointer" routerLink="/user/cesta">
+            <div class="relative">
+              <span class="material-symbols-outlined text-gray-400">
+                shopping_bag
+              </span>
+              @if (showCestaIndicator) {
+                <span class="top-0 start-3 absolute w-3 h-3 bg-red-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+              }
+            </div>
+          </div>
+        }
+        <div class="flex items-center ms-4">
           <div class="relative">
             <button type="button"
               class="flex text-sm rounded-full cursor-pointer"

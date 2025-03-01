@@ -44,7 +44,11 @@
         </div>
         <div class="px-5 py-3 flex flex-col flex-grow">
           <div>
-            <p class="text-2xs text-gray-500 dark:text-white">{{ producto.stock }} unidades</p>
+            @if (producto.stock > 0) {
+              <p class="text-xs text-gray-500 dark:text-white">{{ producto.stock }} unidades</p>
+            } @else {
+              <p class="text-xs font-bold text-red-500 dark:text-red-400">Sin stock</p>
+            }
             <h5 class="text-l font-semibold tracking-tight text-gray-900 dark:text-white">{{ producto.nombre }}</h5>
           </div>
           <div class="flex items-center justify-between mt-auto">

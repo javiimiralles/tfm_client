@@ -1,12 +1,12 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ProveedoresService} from '../../../services/proveedores.service';
+import {ProveedoresService} from '../../../../services/proveedores.service';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {AlertsService} from '../../../services/alerts.service';
-import {PaisesService} from '../../../services/paises.service';
-import {UsuariosService} from '../../../services/usuarios.service';
-import {Proveedor} from '../../../models/proveedor.model';
-import {Pais} from '../../../models/pais.model';
+import {AlertsService} from '../../../../services/alerts.service';
+import {PaisesService} from '../../../../services/paises.service';
+import {UsuariosService} from '../../../../services/usuarios.service';
+import {Proveedor} from '../../../../models/proveedor.model';
+import {Pais} from '../../../../models/pais.model';
 import {NgClass} from '@angular/common';
 
 @Component({
@@ -78,7 +78,7 @@ export class ProveedorFormComponent implements OnInit {
       next: (res) => {
         if (!res['data']) {
           this.alertsService.showError('Proveedor no encontrado');
-          this.router.navigate(['/user/proveedores-table']);
+          this.router.navigate(['/user/proveedores/proveedores-table']);
           return;
         }
         this.proveedor = res['data'];
@@ -92,7 +92,7 @@ export class ProveedorFormComponent implements OnInit {
     this.proveedoresService.createProveedor(this.proveedor).subscribe({
       next: () => {
         this.alertsService.showAlert('Proveedor creado', 'El proveedor ha sido creado correctamente', 'success');
-        this.router.navigate(['/user/proveedores-table']);
+        this.router.navigate(['/user/proveedores/proveedores-table']);
       },
       error: (err) => {
         this.alertsService.showError('Error al crear el proveedor', err);
@@ -105,7 +105,7 @@ export class ProveedorFormComponent implements OnInit {
     this.proveedoresService.updateProveedor(this.proveedor).subscribe({
       next: () => {
         this.alertsService.showAlert('Proveedor actualizado', 'El proveedor ha sido actualizado correctamente', 'success');
-        this.router.navigate(['/user/proveedores-table']);
+        this.router.navigate(['/user/proveedores/proveedores-table']);
       },
       error: (err) => {
         this.alertsService.showError('Error al actualizar el proveedor', err);

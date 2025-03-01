@@ -12,8 +12,9 @@ import {EmpleadoFormComponent} from './pages/empleados/empleado-form/empleado-fo
 import {ProductosViewComponent} from './pages/inventario/productos/productos-view/productos-view.component';
 import {ProductoFormComponent} from './pages/inventario/productos/producto-form/producto-form.component';
 import {CategoriasProductosTableComponent} from './pages/inventario/categorias/categorias-productos-table/categorias-productos-table.component';
-import {ProveedoresTableComponent} from './pages/proveedores/proveedores-table/proveedores-table.component';
-import {ProveedorFormComponent} from './pages/proveedores/proveedor-form/proveedor-form.component';
+import {ProveedoresTableComponent} from './pages/proveedores/proveedores/proveedores-table/proveedores-table.component';
+import {ProveedorFormComponent} from './pages/proveedores/proveedores/proveedor-form/proveedor-form.component';
+import {CestaComponent} from './pages/cesta/cesta.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -22,11 +23,12 @@ export const routes: Routes = [
     {path: 'empleado-form/:id', component: EmpleadoFormComponent, data: {title: 'Empleado'}},
     {path: 'clientes-table', component: ClientesTableComponent, data: {title: 'Clientes'}},
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
-    {path: 'proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
-    {path: 'proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
+    {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
+    {path: 'proveedores/proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
     {path: 'inventario/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},
+    {path: 'cesta', component: CestaComponent, data: {title: 'Cesta'}},
   ]},
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [
     {path: 'login', component: LoginComponent, data: {title: 'Login'}},
