@@ -9,6 +9,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 })
 export class ConfirmationModalComponent implements OnInit{
 
+  @Input() id: string = 'confirmation-modal';
   @Input() message: string = '¿Estás seguro de que quieres continuar?';
   @Input() confirmText: string = 'Aceptar';
   @Input() confirmBtnType: 'primary' | 'danger' = 'primary';

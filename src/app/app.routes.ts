@@ -15,6 +15,9 @@ import {CategoriasProductosTableComponent} from './pages/inventario/categorias/c
 import {ProveedoresTableComponent} from './pages/proveedores/proveedores/proveedores-table/proveedores-table.component';
 import {ProveedorFormComponent} from './pages/proveedores/proveedores/proveedor-form/proveedor-form.component';
 import {CestaComponent} from './pages/cesta/cesta.component';
+import {
+  PedidosProveedoresTableComponent
+} from './pages/proveedores/pedidos/pedidos-proveedores-table/pedidos-proveedores-table.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -25,6 +28,7 @@ export const routes: Routes = [
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
     {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
     {path: 'proveedores/proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
+    {path: 'proveedores/pedidos-proveedores-table', component: PedidosProveedoresTableComponent, data: {title: 'Pedidos a proveedores'}},
     {path: 'inventario/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},

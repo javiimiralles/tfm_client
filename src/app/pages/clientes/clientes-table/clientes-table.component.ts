@@ -109,7 +109,6 @@ export class ClientesTableComponent implements OnInit {
     return formatDate(date);
   }
 
-
   private loadClientes() {
     this.clienteFilter = this.filtersSubject.getValue();
     this.clienteFilter.page = this.pageNumber;

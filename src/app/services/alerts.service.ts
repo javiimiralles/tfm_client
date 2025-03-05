@@ -49,7 +49,7 @@ export class AlertsService {
     let msg = message;
     if (err) {
       console.error(err);
-      msg = err.error.message || message;
+      msg = err?.error?.message || message;
     }
     this.showAlert('Error', msg, 'danger');
   }
