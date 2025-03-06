@@ -18,6 +18,9 @@ import {CestaComponent} from './pages/cesta/cesta.component';
 import {
   PedidosProveedoresTableComponent
 } from './pages/proveedores/pedidos/pedidos-proveedores-table/pedidos-proveedores-table.component';
+import {
+  PedidoProveedorDetailsComponent
+} from './pages/proveedores/pedidos/pedido-proveedor-details/pedido-proveedor-details.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -29,6 +32,7 @@ export const routes: Routes = [
     {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
     {path: 'proveedores/proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
     {path: 'proveedores/pedidos-proveedores-table', component: PedidosProveedoresTableComponent, data: {title: 'Pedidos a proveedores'}},
+    {path: 'proveedores/pedido-proveedor-details/:id', component: PedidoProveedorDetailsComponent, data: {title: 'Detalles del pedido'}},
     {path: 'inventario/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},

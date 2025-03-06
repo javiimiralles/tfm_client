@@ -44,7 +44,7 @@ export class CestaComponent implements OnInit {
   realizarPedido(idProveedor: number) {
     const detallesPedido: DetallePedidoProveedor[] = this.agrupacionCesta.find(a => a.proveedor.id === idProveedor)?.items
       .filter(item => this.selectedItems[idProveedor]?.[item.producto.id])
-      .map(item => ({idProducto: item.producto.id, cantidad: item.cantidad}));
+      .map(item => ({producto: item.producto, cantidad: item.cantidad}));
 
     if (!detallesPedido || detallesPedido.length === 0) {
       this.alertsService.showAlert('Advertencia', 'No hay productos seleccionados para realizar el pedido', 'warning');
@@ -55,7 +55,7 @@ export class CestaComponent implements OnInit {
       .subscribe(() => {
         this.alertsService.showAlert('Pedido realizado', 'Se ha realizado el pedido correctamente', 'success');
         for (const item of detallesPedido) {
-          this.cestaService.removeProducto(item.idProducto);
+          this.cestaService.removeProducto(item.producto.id);
         }
         this.agruparCesta();
       });

@@ -20,7 +20,8 @@ import {CurrencyPipe, NgClass} from '@angular/common';
     FormsModule,
     ReactiveFormsModule,
     CurrencyPipe,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './pedidos-proveedores-table.component.html',
   standalone: true,
@@ -36,8 +37,8 @@ export class PedidosProveedoresTableComponent implements OnInit {
 
   dropdownStates: { [key: number]: boolean } = {};
 
-  showEditButton = false;
-  showDeleteButton = false;
+  showCambiarEstadoButton = false;
+  showCancelarButton = false;
 
   pedidoFilter: PedidoProveedorFilter = new PedidoProveedorFilter();
   filtersSubject = new BehaviorSubject<PedidoProveedorFilter>(new PedidoProveedorFilter());
@@ -171,8 +172,8 @@ export class PedidosProveedoresTableComponent implements OnInit {
   private checkPermissions(): boolean {
     if (!this.usuariosService.checkPermissions('ACCESO_PEDIDOS_PROVEEDORES')) return false;
 
-    this.showEditButton = this.usuariosService.hasPermission('EDICION_PEDIDOS_PROVEEDORES');
-    this.showDeleteButton = this.usuariosService.hasPermission('ELIMINACION_PEDIDOS_PROVEEDORES');
+    this.showCambiarEstadoButton = this.usuariosService.hasPermission('EDICION_PEDIDOS_PROVEEDORES');
+    this.showCancelarButton = this.usuariosService.hasPermission('ELIMINACION_PEDIDOS_PROVEEDORES');
 
     return true;
   }

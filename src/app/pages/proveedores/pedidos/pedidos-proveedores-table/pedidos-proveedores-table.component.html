@@ -31,11 +31,9 @@
         <th scope="col" class="px-4 py-3">Fecha pedido</th>
         <th scope="col" class="px-4 py-3">Estado</th>
         <th scope="col" class="px-4 py-3">Coste</th>
-        @if (showEditButton || showDeleteButton) {
-          <th scope="col" class="px-4 py-3">
-            <span class="sr-only">Acciones</span>
-          </th>
-        }
+        <th scope="col" class="px-4 py-3">
+          <span class="sr-only">Acciones</span>
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -58,31 +56,32 @@
               </div>
             </td>
             <td class="px-4 py-3">{{ pedido.costeTotal | currency:'EUR':'symbol':'1.2-2' }}</td>
-            @if ((showEditButton || showDeleteButton) && pedido.estado !== 'RECIBIDO' && pedido.estado !== 'CANCELADO') {
-              <td class="px-4 py-3 flex items-center justify-end relative">
-                <button (click)="toggleDropdownState(pedido.id)" class="dropdown-button cursor-pointer inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
-                  <span class="material-symbols-outlined">
-                    more_horiz
-                  </span>
-                </button>
-                <div
-                  [class.hidden]="!dropdownStates[pedido.id]"
-                  class="dropdown absolute hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
-                  <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
-                    @if (showEditButton) {
-                      <li>
-                        <a (click)="openCambiarEstadoPedidoModal(pedido.id, pedido.estado)" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cambiar estado</a>
-                      </li>
-                    }
-                    @if (showDeleteButton) {
-                      <li>
-                        <a (click)="openCancelarPedidoModal(pedido.id)" class="block cursor-pointer py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Cancelar pedido</a>
-                      </li>
-                    }
-                  </ul>
-                </div>
-              </td>
-            }
+            <td class="px-4 py-3 flex items-center justify-end relative">
+              <button (click)="toggleDropdownState(pedido.id)" class="dropdown-button cursor-pointer inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
+                <span class="material-symbols-outlined">
+                  more_horiz
+                </span>
+              </button>
+              <div
+                [class.hidden]="!dropdownStates[pedido.id]"
+                class="dropdown absolute hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+                <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
+                  <li>
+                    <a [routerLink]="['/user/proveedores/pedido-proveedor-details', pedido.id]" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ver detalles</a>
+                  </li>
+                  @if (showCambiarEstadoButton && pedido.estado !== 'RECIBIDO' && pedido.estado !== 'CANCELADO') {
+                    <li>
+                      <a (click)="openCambiarEstadoPedidoModal(pedido.id, pedido.estado)" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cambiar estado</a>
+                    </li>
+                  }
+                  @if (showCancelarButton && pedido.estado !== 'RECIBIDO' && pedido.estado !== 'CANCELADO') {
+                    <li>
+                      <a (click)="openCancelarPedidoModal(pedido.id)" class="block cursor-pointer py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Cancelar pedido</a>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </td>
           </tr>
         }
       </tbody>
