@@ -21,6 +21,7 @@ import {
 import {
   PedidoProveedorDetailsComponent
 } from './pages/proveedores/pedidos/pedido-proveedor-details/pedido-proveedor-details.component';
+import {RolesTableComponent} from './pages/roles/roles-table/roles-table.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -36,6 +37,7 @@ export const routes: Routes = [
     {path: 'inventario/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},
+    {path: 'roles-table', component: RolesTableComponent, data: {title: 'Roles'}},
     {path: 'cesta', component: CestaComponent, data: {title: 'Cesta'}},
   ]},
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [

@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {EmpleadosService} from './empleados.service';
 import {environment} from '../../environments/environment';
 import {HeadersService} from './headers.service';
+import {RolFilter} from '../filters/rol.filter';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,14 @@ export class RolesService {
   getRoles() {
     const idEmpresa = this.empleadosService.idEmpresa;
     return this.http.get(`${environment.apiUrl}/roles/empresa/${idEmpresa}`, this.headersService.getHeaders())
+  }
+
+  getRolesByFilter(filter: RolFilter) {
+    filter.idEmpresa = this.empleadosService.idEmpresa;
+    return this.http.post(`${environment.apiUrl}/roles/filter`, filter, this.headersService.getHeaders())
+  }
+
+  deleteRol(id: number) {
+    return this.http.delete(`${environment.apiUrl}/roles/${id}`, this.headersService.getHeaders())
   }
 }

@@ -98,15 +98,15 @@ export class EmpleadosTableComponent implements OnInit{
     }
   }
 
-  toggleDropdownState(idCliente: number) {
+  toggleDropdownState(idEmpleado: number) {
     this.dropdownStates = {
       ...this.dropdownStates,
-      [idCliente]: !this.dropdownStates[idCliente],
+      [idEmpleado]: !this.dropdownStates[idEmpleado],
     };
 
     // Cerrar los demás dropdowns
     Object.keys(this.dropdownStates).forEach((key) => {
-      if (Number(key) !== idCliente) {
+      if (Number(key) !== idEmpleado) {
         this.dropdownStates[Number(key)] = false;
       }
     });

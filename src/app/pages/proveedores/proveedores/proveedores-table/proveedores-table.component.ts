@@ -96,15 +96,15 @@ export class ProveedoresTableComponent implements OnInit {
     }
   }
 
-  toggleDropdownState(idCliente: number) {
+  toggleDropdownState(idProveedor: number) {
     this.dropdownStates = {
       ...this.dropdownStates,
-      [idCliente]: !this.dropdownStates[idCliente],
+      [idProveedor]: !this.dropdownStates[idProveedor],
     };
 
     // Cerrar los demás dropdowns
     Object.keys(this.dropdownStates).forEach((key) => {
-      if (Number(key) !== idCliente) {
+      if (Number(key) !== idProveedor) {
         this.dropdownStates[Number(key)] = false;
       }
     });

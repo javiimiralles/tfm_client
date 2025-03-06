@@ -133,15 +133,15 @@ export class CategoriasProductosTableComponent implements OnInit{
     }
   }
 
-  toggleDropdownState(idCliente: number) {
+  toggleDropdownState(idCategoria: number) {
     this.dropdownStates = {
       ...this.dropdownStates,
-      [idCliente]: !this.dropdownStates[idCliente],
+      [idCategoria]: !this.dropdownStates[idCategoria],
     };
 
     // Cerrar los demás dropdowns
     Object.keys(this.dropdownStates).forEach((key) => {
-      if (Number(key) !== idCliente) {
+      if (Number(key) !== idCategoria) {
         this.dropdownStates[Number(key)] = false;
       }
     });
