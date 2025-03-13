@@ -1,0 +1,70 @@
+<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ cardTitle }}</h2>
+  <form [formGroup]="rolForm" (ngSubmit)="onSubmit()">
+    <div class="grid gap-4 mb-6 md:grid-cols-2">
+      <div>
+        <label for="nombre" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched }">Nombre *</label>
+        <input type="text" id="nombre"
+               formControlName="nombre"
+               maxlength="50"
+               [ngClass]="{ 'border-red-600': rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched }"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+        @if (rolForm.get('nombre')?.invalid && rolForm.get('nombre')?.touched) {
+          @if (rolForm.get('nombre')?.errors?.['required']) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">El nombre es obligatorio</p>
+          }
+        }
+      </div>
+      <div>
+        <label for="descripcion" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Descripción</label>
+        <textarea id="descripcion" formControlName="descripcion" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Escribe una descripción del rol..."></textarea>
+      </div>
+    </div>
+    <div class="flex items-center justify-between">
+      <a href="#" [routerLink]="['/user/roles-table']" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+        <svg class="w-4 h-4 me-1 transform scale-x-[-1]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+        </svg>
+        Volver atrás
+      </a>
+      <button type="submit" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        Guardar
+      </button>
+    </div>
+  </form>
+</div>
+
+<div class="w-full mt-6 p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Permisos</h2>
+  <div id="accordion" data-active-classes="bg-indigo-100 dark:bg-gray-800 text-indigo-600 dark:text-white">
+    @for (agrupacion of agrupacionesAcciones; let i = $index; track i) {
+      <h2>
+        <button
+          type="button"
+          [ngClass]="i == 0 ? 'rounded-t-xl' : ''"
+          class="flex items-center justify-between w-full p-5 font-bold text-gray-700 border border-b-0 border-gray-200 focus:ring-4 focus:ring-indigo-200 dark:focus:ring-indigo-800 dark:border-gray-700 dark:text-gray-400 hover:bg-indigo-100 dark:hover:bg-gray-800 gap-3"
+          (click)="toggleAccordion(i)" >
+          <span>{{ agrupacion[0].grupo }}</span>
+          <span class="material-symbols-outlined">
+            {{ accordionStates[i] ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+          </span>
+        </button>
+      </h2>
+      @if (accordionStates[i]) {
+        <div class="p-5 border border-b-0 border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+          @for (accion of agrupacion; track accion.id) {
+            <div class="flex items-center mb-4">
+              <input
+                id="checkbox-{{accion.id}}"
+                type="checkbox"
+                (change)="togglePermission(accion.id)"
+                [checked]="checkedPermissions[accion.id]"
+                class="w-4 h-4 text-indigo-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+              <label for="checkbox-{{accion.id}}" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{accion.nombre}}</label>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

@@ -22,6 +22,7 @@ import {
   PedidoProveedorDetailsComponent
 } from './pages/proveedores/pedidos/pedido-proveedor-details/pedido-proveedor-details.component';
 import {RolesTableComponent} from './pages/roles/roles-table/roles-table.component';
+import {RolFormComponent} from './pages/roles/rol-form/rol-form.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -38,6 +39,7 @@ export const routes: Routes = [
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},
     {path: 'roles-table', component: RolesTableComponent, data: {title: 'Roles'}},
+    {path: 'rol-form/:id', component: RolFormComponent, data: {title: 'Rol'}},
     {path: 'cesta', component: CestaComponent, data: {title: 'Cesta'}},
   ]},
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [
