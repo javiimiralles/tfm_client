@@ -23,25 +23,40 @@ import {
 } from './pages/proveedores/pedidos/pedido-proveedor-details/pedido-proveedor-details.component';
 import {RolesTableComponent} from './pages/roles/roles-table/roles-table.component';
 import {RolFormComponent} from './pages/roles/rol-form/rol-form.component';
+import {PresupuestosTableComponent} from './pages/ventas/presupuestos/presupuestos-table/presupuestos-table.component';
+import {PedidosTableComponent} from './pages/ventas/pedidos/pedidos-table/pedidos-table.component';
+import {FacturasTableComponent} from './pages/ventas/facturas/facturas-table/facturas-table.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
+      // Dashboard
     {path: 'dashboard', component: DashboardComponent, data: {title: 'Dashboard'}},
+      // Empleados
     {path: 'empleados-table', component: EmpleadosTableComponent, data: {title: 'Empleados'}},
     {path: 'empleado-form/:id', component: EmpleadoFormComponent, data: {title: 'Empleado'}},
+      // Clientes
     {path: 'clientes-table', component: ClientesTableComponent, data: {title: 'Clientes'}},
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
+      // Ventas
+    {path: 'ventas/presupuestos-table', component: PresupuestosTableComponent, data: {title: 'Presupuestos'}},
+    {path: 'ventas/pedidos-table', component: PedidosTableComponent, data: {title: 'Pedidos'}},
+      {path: 'ventas/facturas-table', component: FacturasTableComponent, data: {title: 'Facturas'}},
+      // Proveedores
     {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
     {path: 'proveedores/proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
     {path: 'proveedores/pedidos-proveedores-table', component: PedidosProveedoresTableComponent, data: {title: 'Pedidos a proveedores'}},
     {path: 'proveedores/pedido-proveedor-details/:id', component: PedidoProveedorDetailsComponent, data: {title: 'Detalles del pedido'}},
+      // Inventario
     {path: 'inventario/productos-view', component: ProductosViewComponent, data: {title: 'Productos'}},
     {path: 'inventario/producto-form/:id', component: ProductoFormComponent, data: {title: 'Producto'}},
     {path: 'inventario/categorias-productos-table', component: CategoriasProductosTableComponent, data: {title: 'Categorías de productos'}},
+      // Roles
     {path: 'roles-table', component: RolesTableComponent, data: {title: 'Roles'}},
     {path: 'rol-form/:id', component: RolFormComponent, data: {title: 'Rol'}},
+      // Cesta
     {path: 'cesta', component: CestaComponent, data: {title: 'Cesta'}},
   ]},
+  // Auth
   {path: 'auth', component: AuthLayoutComponent, canActivate: [noAuthGuard], children: [
     {path: 'login', component: LoginComponent, data: {title: 'Login'}},
   ]},
