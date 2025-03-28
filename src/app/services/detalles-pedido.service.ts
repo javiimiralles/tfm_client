@@ -6,14 +6,14 @@ import {environment} from '../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
-export class DetallesPedidoProveedorService {
+export class DetallesPedidoService {
 
   constructor(
     private readonly http: HttpClient,
     private readonly headersService: HeadersService
   ) { }
 
-  getDetallesPedidoProveedorByIdPedidoProveedor(idPedido: number) {
-    return this.http.get(`${environment.apiUrl}/detalles-pedido-proveedor/pedido/${idPedido}`, this.headersService.getHeaders());
+  getDetallesPedidoByPedidoId(id: number) {
+    return this.http.get(`${environment.apiUrl}/detalles-pedido/pedido/${id}`, this.headersService.getHeaders());
   }
 }

@@ -8,7 +8,7 @@ export class PedidoFilter {
     public idEmpresa?: number,
     public fechaPedido?: Date,
     public estado?: EstadoPedidoEnum,
-    public tipoPedido?: TipoPedidoEnum,
+    public tipo?: TipoPedidoEnum,
     public metodoPago?: MetodoPagoEnum,
     public costeTotal?: number,
     public observaciones?: string,

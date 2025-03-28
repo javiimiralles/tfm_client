@@ -23,7 +23,7 @@
     </div>
     @if (showCreateButton) {
       <div class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-        <button type="button" routerLink="/user/presupuesto-form/new" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        <button type="button" routerLink="/user/ventas/presupuesto-form/new" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
             <span class="material-symbols-outlined">
               add
             </span>
@@ -39,6 +39,7 @@
         <th scope="col" class="px-4 py-3">ID</th>
         <th scope="col" class="px-4 py-3">Cliente</th>
         <th scope="col" class="px-4 py-3">Fecha presupuesto</th>
+        <th scope="col" class="px-4 py-3">Estado</th>
         <th scope="col" class="px-4 py-3">Importe</th>
         @if (showEditButton || showDeleteButton) {
           <th scope="col" class="px-4 py-3">
@@ -53,7 +54,21 @@
             <th scope="row" class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">{{ presupuesto.id }}</th>
             <td class="px-4 py-3">{{ presupuesto.cliente.nombre + (presupuesto.cliente.apellidos ? ' ' + presupuesto.cliente.apellidos : '') }}</td>
             <td class="px-4 py-3">{{ formatDate(presupuesto.fechaPedido) }}</td>
-            <td class="px-4 py-3">{{ presupuesto.costeTotal }}</td>
+            <td class="px-4 py-3">
+              <div class="flex items-center">
+                <div class="h-2.5 w-2.5 rounded-full me-2"
+                     [ngClass]="{
+                    'bg-gray-500': presupuesto.estado === 'PENDIENTE',
+                    'bg-green-500': presupuesto.estado === 'RECIBIDO',
+                    'bg-yellow-500': presupuesto.estado === 'ENVIADO',
+                    'bg-blue-500': presupuesto.estado === 'PROCESADO',
+                    'bg-red-500': presupuesto.estado === 'CANCELADO'
+                  }">
+                </div>
+                {{ presupuesto.estado }}
+              </div>
+            </td>
+            <td class="px-4 py-3">{{ presupuesto.costeTotal }} €</td>
             @if (showEditButton || showDeleteButton) {
               <td class="px-4 py-3 flex items-center justify-end relative">
                 <button (click)="toggleDropdownState(presupuesto.id)" class="dropdown-button cursor-pointer inline-flex items-center p-0.5 text-sm font-medium text-center text-gray-500 hover:text-gray-800 rounded-lg focus:outline-none dark:text-gray-400 dark:hover:text-gray-100" type="button">
@@ -67,10 +82,15 @@
                   <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="apple-imac-27-dropdown-button">
                     @if (showEditButton) {
                       <li>
+                        <a [routerLink]="['/user/ventas/presupuesto-form', presupuesto.id]" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Editar</a>
+                      </li>
+                    }
+                    @if (showEditButton && presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+                      <li>
                         <a (click)="openModal(presupuesto.id, true)" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Aceptar presupuesto</a>
                       </li>
                     }
-                    @if (showDeleteButton) {
+                    @if (showDeleteButton && presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
                       <li>
                         <a (click)="openModal(presupuesto.id, false)" class="block cursor-pointer py-2 px-4 text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600">Cancelar presupuesto</a>
                       </li>

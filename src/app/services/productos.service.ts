@@ -21,6 +21,10 @@ export class ProductosService {
     return this.http.get(`${environment.apiUrl}/productos/${id}`, this.headersService.getHeaders());
   }
 
+  getProductosByEmpresa() {
+    return this.http.get(`${environment.apiUrl}/productos/empresa/${this.empleadosService.idEmpresa}`, this.headersService.getHeaders());
+  }
+
   getProductosByFilter(filter: ProductoFilter) {
     filter.idEmpresa = this.empleadosService.idEmpresa;
     return this.http.post(`${environment.apiUrl}/productos/filter`, filter, this.headersService.getHeaders());

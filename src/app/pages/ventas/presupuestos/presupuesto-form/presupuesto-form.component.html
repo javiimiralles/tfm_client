@@ -1,0 +1,202 @@
+<div class="w-full p-4 bg-white border border-gray-200 rounded-lg shadow-sm sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
+  <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">{{ cardTitle }}</h2>
+  <form [formGroup]="pedidoForm" (ngSubmit)="onSubmit()">
+    <div class="grid gap-4 mb-6 md:grid-cols-2">
+      <div>
+        <label for="cliente" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': pedidoForm.get('cliente')?.invalid && pedidoForm.get('cliente')?.touched }">Cliente*</label>
+        <select id="cliente" formControlName="cliente" required [ngClass]="{ 'border-red-600': pedidoForm.get('cliente')?.invalid && pedidoForm.get('cliente')?.touched }" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+          @for (cliente of clientes; track cliente.id) {
+            <option value="{{cliente.id}}">{{ "[" + cliente.id + "] " + cliente.nombre + (cliente.apellidos != null ? ' ' + cliente.apellidos : '')}}</option>
+          }
+        </select>
+          @if (pedidoForm.get('cliente')?.invalid && pedidoForm.get('cliente')?.touched) {
+            @if (pedidoForm.get('cliente')?.errors?.['required']) {
+              <p class="mt-2 text-sm text-red-600 dark:text-red-500">El cliente es obligatorio</p>
+            }
+          }
+      </div>
+      <div>
+        <label for="metodoPago" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Método de pago</label>
+        <select id="metodoPago" formControlName="metodoPago" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+          @for (metodoPago of metodosPago; track $index) {
+            <option value="{{metodoPago}}">{{metodoPago}}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="mb-6">
+      <label for="observaciones" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Observaciones</label>
+      <textarea id="observaciones" formControlName="observaciones" rows="6" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" placeholder="Escribe aquí..."></textarea>
+    </div>
+    <div class="flex items-center justify-between">
+      <div>
+        <a href="#" [routerLink]="['/user/ventas/presupuestos-table']" class="inline-flex items-center font-medium text-blue-600 dark:text-blue-500 hover:underline">
+          <svg class="w-4 h-4 me-1 transform scale-x-[-1]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9"/>
+          </svg>
+          Volver atrás
+        </a>
+      </div>
+      @if (!presupuesto && showCreatePresupuestoButton) {
+        <button type="submit" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+          Crear presupuesto
+        </button>
+      }
+      @if (presupuesto) {
+        <div>
+          @if (showRechazarPresupuestoButton && presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+            <button (click)="openCancelarPresupuestoModal()" class="cursor-pointer items-center justify-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">
+              Cancelar pedido
+            </button>
+          }
+          @if (showAceptarPresupuestoButton && presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+            <button (click)="openAceptarPresupuestoModal()" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 me-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+              Cambiar estado
+            </button>
+          }
+          @if (presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+            <button type="submit" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+              Guardar cambios
+            </button>
+          }
+        </div>
+      }
+    </div>
+  </form>
+</div>
+
+<!-- Tabla de los productos -->
+<div class="w-full bg-white mt-6 border border-gray-200 rounded-lg shadow-sm dark:bg-gray-800 dark:border-gray-700">
+  <div class="flex justify-between items-center p-4">
+    <h2 class="text-lg font-bold text-gray-900 dark:text-white">Productos</h2>
+    @if (presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+      <button type="button" (click)="openAddProductoModal()" class="flex cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        <span class="material-symbols-outlined">
+          add
+        </span>
+        Añadir producto
+      </button>
+    }
+  </div>
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    @if (detallesPedido && detallesPedido.length > 0) {
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr>
+          <th scope="col" class="px-16 py-3">
+            <span class="sr-only">Imagen</span>
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Producto
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Cantidad
+          </th>
+          <th scope="col" class="px-6 py-3">
+            Subtotal
+          </th>
+          @if (presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+            <th scope="col" class="px-4 py-3">
+              <span class="sr-only">Acciones</span>
+            </th>
+          }
+        </tr>
+        </thead>
+        <tbody>
+          @for (detalle of detallesPedido; track detalle.id) {
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+              <td class="p-4">
+                <img src="{{ detalle.producto.imagenUrl ? detalle.producto.imagenUrl : '/images/no_product_image.jpg' }}" class="w-16 rounded-lg md:w-32 max-w-full max-h-full" alt="{{ detalle.producto.nombre }}" loading="lazy">
+              </td>
+              <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                {{ detalle.producto.nombre }}
+              </td>
+              <td class="px-6 py-4">
+                {{ detalle.cantidad }}
+              </td>
+              <td class="px-6 py-4 font-semibold text-gray-900 dark:text-white">
+                {{ detalle.subtotal | currency:'EUR':'symbol':'1.2-2' }}
+              </td>
+              @if (presupuesto.estado !== 'RECIBIDO' && presupuesto.estado !== 'CANCELADO') {
+                <td class="px-6 py-4">
+                  <button (click)="removeProducto(detalle.id)" class="font-medium cursor-pointer text-red-600 dark:text-red-500 hover:underline">Eliminar</button>
+                </td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+<!-- Modal añadir producto -->
+<div id="add-product-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative p-4 w-full max-w-md max-h-full">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Añadir producto
+        </h3>
+        <button type="button" (click)="closeModal()" class="cursor-pointer text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+          <span class="material-symbols-outlined">
+            close
+          </span>
+          <span class="sr-only">Cerrar modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <form [formGroup]="nuevoProductoForm" (ngSubmit)="addProducto()" class="p-4 md:p-5">
+        <div class="grid gap-4 mb-4.5 md:grid-cols-2">
+          <div>
+            <label for="producto" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': nuevoProductoForm.get('producto')?.invalid && nuevoProductoForm.get('producto')?.touched }">Producto *</label>
+            <select id="producto"
+                    formControlName="producto"
+                    [ngClass]="{ 'border-red-600': nuevoProductoForm.get('producto')?.invalid && nuevoProductoForm.get('producto')?.touched }"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500">
+              @for (producto of productos; track producto.id) {
+                <option value="{{ producto.id }}">[{{ producto.id }}] {{ producto.nombre }}</option>
+              }
+            </select>
+            @if (nuevoProductoForm.get('producto')?.invalid && nuevoProductoForm.get('producto')?.touched) {
+              @if (nuevoProductoForm.get('producto')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">El producto es obligatorio</p>
+              }
+            }
+          </div>
+          <div>
+            <label for="cantidad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': nuevoProductoForm.get('cantidad')?.invalid && nuevoProductoForm.get('cantidad')?.touched }">Cantidad *</label>
+            <input type="number" id="cantidad"
+                   formControlName="cantidad"
+                   [ngClass]="{ 'border-red-600': nuevoProductoForm.get('cantidad')?.invalid && nuevoProductoForm.get('cantidad')?.touched }"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" required />
+            @if (nuevoProductoForm.get('cantidad')?.invalid && nuevoProductoForm.get('cantidad')?.touched) {
+              @if (nuevoProductoForm.get('cantidad')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debes especificar la cantidad</p>
+              }
+            }
+          </div>
+        </div>
+        <div class="grid gap-4 mb-4.5 md:grid-cols-2">
+          <div>
+            <label for="precio" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Precio unitario</label>
+            <input type="number" id="precio"
+                   formControlName="precio"
+                   class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-indigo-500 dark:focus:border-indigo-500" readonly />
+          </div>
+          <div>
+            <label for="subtotal" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subtotal</label>
+            <input type="number" id="subtotal"
+                   formControlName="subtotal"
+                   class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-indigo-500 dark:focus:border-indigo-500" readonly />
+          </div>
+        </div>
+        <button type="submit" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+          Añadir producto
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

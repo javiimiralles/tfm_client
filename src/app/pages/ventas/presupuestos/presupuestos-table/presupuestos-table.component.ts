@@ -69,7 +69,16 @@ export class PresupuestosTableComponent implements OnInit {
   }
 
   aceptarPresupuesto() {
-
+    this.pedidosService.aceptarPresupuesto(this.idPedidoSeleccionado).subscribe({
+      next: () => {
+        this.alertsService.showAlert('Presupuesto aceptado', 'Se ha aceptado el presupuesto correctamente', 'success');
+        this.loadPresupuestos();
+        this.closeModal();
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al aceptar el presupuesto', err);
+      }
+    });
   }
 
   cancelarPresupuesto() {
@@ -77,6 +86,7 @@ export class PresupuestosTableComponent implements OnInit {
       next: () => {
         this.alertsService.showAlert('Presupuesto cancelado', 'Se ha cancelado el presupuesto correctamente', 'success');
         this.loadPresupuestos();
+        this.closeModal();
       },
       error: (err) => {
         this.alertsService.showError('Error al cancelar el presupuesto', err);

@@ -1,4 +1,4 @@
 export enum TipoPedidoEnum {
-  PEDIDO = 'Pedido',
-  PRESUPUESTO = 'Presupuesto'
+  PEDIDO = 'PEDIDO',
+  PRESUPUESTO = 'PRESUPUESTO'
 }

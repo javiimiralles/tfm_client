@@ -26,6 +26,7 @@ import {RolFormComponent} from './pages/roles/rol-form/rol-form.component';
 import {PresupuestosTableComponent} from './pages/ventas/presupuestos/presupuestos-table/presupuestos-table.component';
 import {PedidosTableComponent} from './pages/ventas/pedidos/pedidos-table/pedidos-table.component';
 import {FacturasTableComponent} from './pages/ventas/facturas/facturas-table/facturas-table.component';
+import {PresupuestoFormComponent} from './pages/ventas/presupuestos/presupuesto-form/presupuesto-form.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -39,8 +40,9 @@ export const routes: Routes = [
     {path: 'cliente-form/:id', component: ClienteFormComponent, data: {title: 'Cliente'}},
       // Ventas
     {path: 'ventas/presupuestos-table', component: PresupuestosTableComponent, data: {title: 'Presupuestos'}},
+    {path: 'ventas/presupuesto-form/:id', component: PresupuestoFormComponent, data: {title: 'Presupuesto'}},
     {path: 'ventas/pedidos-table', component: PedidosTableComponent, data: {title: 'Pedidos'}},
-      {path: 'ventas/facturas-table', component: FacturasTableComponent, data: {title: 'Facturas'}},
+    {path: 'ventas/facturas-table', component: FacturasTableComponent, data: {title: 'Facturas'}},
       // Proveedores
     {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
     {path: 'proveedores/proveedor-form/:id', component: ProveedorFormComponent, data: {title: 'Proveedor'}},
