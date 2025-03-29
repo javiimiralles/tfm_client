@@ -8,7 +8,6 @@ import {UsuariosService} from '../../../../services/usuarios.service';
 import {AlertsService} from '../../../../services/alerts.service';
 import {PedidosService} from '../../../../services/pedidos.service';
 import {formatDate} from '../../../../utils/date.util';
-import {EstadoPedidoProveedorEnum} from '../../../../enums/estado-pedido-proveedor.enum';
 import {ConfirmationModalComponent} from '../../../../components/confirmation-modal/confirmation-modal.component';
 import {CurrencyPipe, NgClass} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';

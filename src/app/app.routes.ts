@@ -27,6 +27,7 @@ import {PresupuestosTableComponent} from './pages/ventas/presupuestos/presupuest
 import {PedidosTableComponent} from './pages/ventas/pedidos/pedidos-table/pedidos-table.component';
 import {FacturasTableComponent} from './pages/ventas/facturas/facturas-table/facturas-table.component';
 import {PresupuestoFormComponent} from './pages/ventas/presupuestos/presupuesto-form/presupuesto-form.component';
+import {PedidoDetailsComponent} from './pages/ventas/pedidos/pedido-details/pedido-details.component';
 
 export const routes: Routes = [
   {path: 'user', component: MainLayoutComponent, canActivate: [authGuard], children: [
@@ -42,6 +43,7 @@ export const routes: Routes = [
     {path: 'ventas/presupuestos-table', component: PresupuestosTableComponent, data: {title: 'Presupuestos'}},
     {path: 'ventas/presupuesto-form/:id', component: PresupuestoFormComponent, data: {title: 'Presupuesto'}},
     {path: 'ventas/pedidos-table', component: PedidosTableComponent, data: {title: 'Pedidos'}},
+    {path: 'ventas/pedido-details/:id', component: PedidoDetailsComponent, data: {title: 'Detalles del pedido'}},
     {path: 'ventas/facturas-table', component: FacturasTableComponent, data: {title: 'Facturas'}},
       // Proveedores
     {path: 'proveedores/proveedores-table', component: ProveedoresTableComponent, data: {title: 'Proveedores'}},
