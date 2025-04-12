@@ -115,7 +115,7 @@
         </button>
       }
       @if (pedido != null && pedido.estado === 'RECIBIDO') {
-        <button class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+        <button (click)="openGenerarFacturaModal()" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
           Generar factura
         </button>
       }
@@ -183,3 +183,51 @@
   (onConfirm)="cancelarPedido()"
   (onCancel)="closeModal()">
 </app-confirmation-modal>
+
+<!-- Modal generar factura -->
+<div id="generate-invoice-modal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative p-4 w-full max-w-md max-h-full">
+    <!-- Modal content -->
+    <div class="relative bg-white rounded-lg shadow-sm dark:bg-gray-700">
+      <!-- Modal header -->
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600 border-gray-200">
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+          Generar factura
+        </h3>
+        <button type="button" (click)="closeModal()" class="cursor-pointer text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-toggle="crud-modal">
+          <span class="material-symbols-outlined">
+            close
+          </span>
+          <span class="sr-only">Cerrar modal</span>
+        </button>
+      </div>
+      <!-- Modal body -->
+      <form [formGroup]="facturaForm" (ngSubmit)="generarFactura()" class="p-4 md:p-5">
+        <div class="mb-4.5">
+          <label for="fechaVencimiento" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" [ngClass]="{ 'text-red-600': facturaForm.get('fechaVencimiento')?.invalid && facturaForm.get('fechaVencimiento')?.touched }">Fecha vencimiento*</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <span class="material-symbols-outlined text-gray-400 dark:text-white">
+                calendar_month
+              </span>
+            </div>
+            <input
+              id="fechaVencimiento"
+              type="date"
+              formControlName="fechaVencimiento"
+              [ngClass]="{ 'border-red-600': facturaForm.get('fechaVencimiento')?.invalid && facturaForm.get('fechaVencimiento')?.touched }"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-indigo-500 dark:focus:border-indigo-500" />
+            @if (facturaForm.get('fechaVencimiento')?.invalid && facturaForm.get('fechaVencimiento')?.touched) {
+              @if (facturaForm.get('fechaVencimiento')?.errors?.['required']) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">La fecha de vencimiento es obligatoria</p>
+              }
+            }
+          </div>
+        </div>
+        <button type="submit" class="cursor-pointer items-center justify-center text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:ring-indigo-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-indigo-600 dark:hover:bg-indigo-700 focus:outline-none dark:focus:ring-indigo-800">
+          Aceptar
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

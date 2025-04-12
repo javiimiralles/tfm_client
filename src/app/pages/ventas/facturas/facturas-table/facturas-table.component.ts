@@ -8,6 +8,7 @@ import {FacturasService} from '../../../../services/facturas.service';
 import {formatDate} from '../../../../utils/date.util';
 import {CurrencyPipe, NgClass} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {forzarDescarga} from '../../../../utils/pdf.util';
 
 @Component({
   selector: 'app-facturas-table',
@@ -46,6 +47,17 @@ export class FacturasTableComponent implements OnInit {
     this.filtersSubject.pipe(debounceTime(500)).subscribe(() => {
       this.loadFacturas();
     });
+  }
+
+  exportarFactura(id: number) {
+    this.facturasService.genrarFacturaPdf(id).subscribe({
+      next: (res) => {
+        forzarDescarga(res as Blob, `factura.pdf`);
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al descargar la factura', err);
+      }
+    })
   }
 
   onFilterChange() {

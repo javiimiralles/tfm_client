@@ -8,10 +8,13 @@ import {UsuariosService} from '../../../../services/usuarios.service';
 import {PedidosService} from '../../../../services/pedidos.service';
 import {DetallesPedidoService} from '../../../../services/detalles-pedido.service';
 import {formatDate} from '../../../../utils/date.util';
-import {EstadoPedidoProveedorEnum} from '../../../../enums/estado-pedido-proveedor.enum';
 import {EstadoPedidoEnum} from '../../../../enums/estado-pedido.enum';
 import {ConfirmationModalComponent} from '../../../../components/confirmation-modal/confirmation-modal.component';
 import {CurrencyPipe, NgClass} from '@angular/common';
+import {FacturasService} from '../../../../services/facturas.service';
+import {Factura} from '../../../../models/factura.model';
+import {FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {forzarDescarga} from '../../../../utils/pdf.util';
 
 @Component({
   selector: 'app-pedido-details',
@@ -19,13 +22,18 @@ import {CurrencyPipe, NgClass} from '@angular/common';
     ConfirmationModalComponent,
     CurrencyPipe,
     NgClass,
-    RouterLink
+    RouterLink,
+    ReactiveFormsModule
   ],
   templateUrl: './pedido-details.component.html',
   standalone: true,
   styleUrl: './pedido-details.component.css'
 })
 export class PedidoDetailsComponent implements OnInit {
+
+  facturaForm: FormGroup = new FormGroup({
+    fechaVencimiento: new FormControl('', [Validators.required]),
+  })
 
   pedido: Pedido;
   detallesPedido: DetallePedido[] = [];
@@ -41,7 +49,8 @@ export class PedidoDetailsComponent implements OnInit {
     private readonly alertsService: AlertsService,
     private readonly usuariosService: UsuariosService,
     private readonly pedidosService: PedidosService,
-    private readonly detallesPedidoService: DetallesPedidoService
+    private readonly detallesPedidoService: DetallesPedidoService,
+    private readonly facturasService: FacturasService
   ) { }
 
   ngOnInit() {
@@ -64,6 +73,13 @@ export class PedidoDetailsComponent implements OnInit {
 
   openCancelarPedidoModal() {
     const modalEl = document.getElementById('cancel-modal');
+    if (!modalEl) return;
+    this.modal = new Modal(modalEl);
+    this.modal.show();
+  }
+
+  openGenerarFacturaModal() {
+    const modalEl = document.getElementById('generate-invoice-modal');
     if (!modalEl) return;
     this.modal = new Modal(modalEl);
     this.modal.show();
@@ -114,6 +130,20 @@ export class PedidoDetailsComponent implements OnInit {
 
   closeModal() {
     if (this.modal) this.modal.hide();
+  }
+
+  generarFactura() {
+    const factura: Factura = new Factura(null, this.pedido, null, null, this.pedido.costeTotal, null, this.pedido.cliente, this.facturaForm.get('fechaVencimiento')?.value);
+    this.facturasService.crearFactura(factura).subscribe({
+      next: (res) => {
+        this.alertsService.showAlert('Factura generada', 'La factura ha sido generada correctamente', 'success');
+        forzarDescarga(res as Blob, "factura.pdf");
+        this.closeModal();
+      },
+      error: (err) => {
+        this.alertsService.showError('Error al generar la factura', err);
+      }
+    })
   }
 
   formatDate(date: Date): string {

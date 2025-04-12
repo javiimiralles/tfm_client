@@ -30,6 +30,7 @@
         <th scope="col" class="px-4 py-3">ID pedido</th>
         <th scope="col" class="px-4 py-3">Cliente</th>
         <th scope="col" class="px-4 py-3">Fecha factura</th>
+        <th scope="col" class="px-4 py-3">Fecha vencimiento</th>
         <th scope="col" class="px-4 py-3">Número factura</th>
         <th scope="col" class="px-4 py-3">Importe</th>
         <th scope="col" class="px-4 py-3">
@@ -44,6 +45,7 @@
             <td class="px-4 py-3">{{ factura.pedido.id }}</td>
             <td class="px-4 py-3">{{ factura.pedido.cliente.nombre + (factura.pedido.cliente.apellidos ? ' ' + factura.pedido.cliente.apellidos : '') }}</td>
             <td class="px-4 py-3">{{ formatDate(factura.fechaFactura) }}</td>
+            <td class="px-4 py-3">{{ formatDate(factura.fechaVencimiento) }}</td>
             <td class="px-4 py-3">{{ factura.numeroFactura }}</td>
             <td class="px-4 py-3">{{ factura.importe | currency:'EUR':'symbol':'1.2-2' }}</td>
             <td class="px-4 py-3 flex items-center justify-end relative">
@@ -60,7 +62,7 @@
                     <a class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ver detalles</a>
                   </li>
                   <li>
-                    <a class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Exportar</a>
+                    <a (click)="exportarFactura(factura.id)" class="block cursor-pointer py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Exportar</a>
                   </li>
                 </ul>
               </div>
