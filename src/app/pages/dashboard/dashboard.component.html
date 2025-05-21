@@ -1,1 +1,38 @@
-<p>dashboard works!</p>
+<div class="bg-gray-100 p-4 rounded-lg">
+  <h1 class="text-lg text-gray-500 mb-4">Últimos 30 días</h1>
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4.5">
+    <app-info-card
+      icon="trending_up"
+      iconClass="bg-green-700 text-white"
+      label="Total facturado"
+      isMoney="true"
+      [value]="dashboardSummary.totalFacturado">
+    </app-info-card>
+    <app-info-card
+      icon="trending_down"
+      iconClass="bg-red-700 text-white"
+      label="Gastos en pedidos a proveedores"
+      isMoney="true"
+      [value]="dashboardSummary.gastosPedidosProveedores">
+    </app-info-card>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <app-info-card
+      icon="payments"
+      iconClass="bg-lime-700 text-white"
+      label="Ventas en curso"
+      [value]="dashboardSummary.ventasEnCurso">
+    </app-info-card>
+    <app-info-card
+      icon="people"
+      label="Clientes nuevos"
+      [value]="dashboardSummary.clientesNuevos">
+    </app-info-card>
+    <app-info-card
+      icon="inventory_2"
+      iconClass="bg-yellow-700 text-white"
+      label="Pedidos a proveedores"
+      [value]="dashboardSummary.pedidosProveedores">
+    </app-info-card>
+  </div>
+</div>
