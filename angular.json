@@ -32,7 +32,8 @@
             ],
             "scripts": [
               "./node_modules/flowbite/dist/flowbite.min.js",
-              "./node_modules/flowbite-datepicker/dist/js/datepicker-full.min.js"
+              "./node_modules/flowbite-datepicker/dist/js/datepicker-full.min.js",
+              "./node_modules/apexcharts/dist/apexcharts.min.js"
             ]
           },
           "configurations": {
@@ -98,7 +99,8 @@
               "src/styles.css"
             ],
             "scripts": [
-              "./node_modules/flowbite/dist/flowbite.min.js"
+              "./node_modules/flowbite/dist/flowbite.min.js",
+              "./node_modules/apexcharts/dist/apexcharts.min.js"
             ]
           }
         }

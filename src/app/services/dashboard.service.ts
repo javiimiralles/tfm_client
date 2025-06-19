@@ -19,4 +19,9 @@ export class DashboardService {
     const idEmpresa = this.empleadosService.idEmpresa;
     return this.http.get(`${environment.apiUrl}/dashboard/summary/${idEmpresa}`, this.headersService.getHeaders());
   }
+
+  getDashboardIcomesAndExpenses() {
+    const idEmpresa = this.empleadosService.idEmpresa;
+    return this.http.get(`${environment.apiUrl}/dashboard/incomes-expenses/${idEmpresa}`, this.headersService.getHeaders());
+  }
 }

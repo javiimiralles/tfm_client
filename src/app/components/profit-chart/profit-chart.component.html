@@ -1,0 +1,46 @@
+<div class="max-w-sm w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+  <h1 class="text-md text-gray-500 mb-4">Últimos 6 meses</h1>
+  <div class="flex justify-between border-gray-200 border-b dark:border-gray-700 pb-3">
+    <dl>
+      <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Beneficio</dt>
+      <dd class="leading-none text-2xl font-bold text-gray-900 dark:text-white">{{ (incomesAndExpenses.totalIngresos - incomesAndExpenses.totalGastos).toFixed(2) }} €</dd>
+    </dl>
+    <div>
+      <span class="text-xs font-medium inline-flex items-center px-2.5 py-1 rounded-md dark:bg-green-900 dark:text-green-300"
+        [ngClass]="{
+          'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': incomesAndExpenses.ratioBeneficio >= 0,
+          'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300': incomesAndExpenses.ratioBeneficio < 0
+        }">
+        Ratio de beneficio {{ incomesAndExpenses.ratioBeneficio }} %
+      </span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 py-3">
+    <dl>
+      <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Ingresos</dt>
+      <dd class="leading-none text-xl font-bold text-green-500 dark:text-green-400">{{ incomesAndExpenses.totalIngresos }} €</dd>
+    </dl>
+    <dl>
+      <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Gastos</dt>
+      <dd class="leading-none text-xl font-bold text-red-600 dark:text-red-500">{{ incomesAndExpenses.totalGastos }} €</dd>
+    </dl>
+  </div>
+
+  <div id="chart">
+    @if (!loading) {
+      <apx-chart
+        [series]="chartOptions.series"
+        [chart]="chartOptions.chart"
+        [fill]="chartOptions.fill"
+        [plotOptions]="chartOptions.plotOptions"
+        [legend]="chartOptions.legend"
+        [dataLabels]="chartOptions.dataLabels"
+        [tooltip]="chartOptions.tooltip"
+        [xaxis]="chartOptions.xaxis"
+        [yaxis]="chartOptions.yaxis"
+        [grid]="chartOptions.grid"
+      ></apx-chart>
+    }
+  </div>
+</div>
