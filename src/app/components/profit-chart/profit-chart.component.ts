@@ -16,6 +16,7 @@ import {
 } from "ng-apexcharts";
 import { DashboardIncomesExpenses } from '../../models/dashboard-incomes-expenses.model';
 import { NgClass } from '@angular/common';
+import { getUltimos6Meses } from '../../utils/date.util';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -58,20 +59,7 @@ export class ProfitChartComponent {
   }
 
   constructor() {
-    this.ultimos6Meses = this.getUltimos6Meses();
-  }
-
-  private getUltimos6Meses() {
-    const meses = ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"];
-    const hoy = new Date();
-    const resultado: string[] = [];
-
-    for (let i = 5; i >= 0; i--) {
-      const fecha = new Date(hoy.getFullYear(), hoy.getMonth() - i, 1);
-      resultado.push(meses[fecha.getMonth()]);
-    }
-
-    return resultado;
+    this.ultimos6Meses = getUltimos6Meses();
   }
 
   private loadChartOptions() {

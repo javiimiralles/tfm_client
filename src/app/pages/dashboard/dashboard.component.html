@@ -22,9 +22,11 @@
     </div>
   </div>
 
-  <div class="bg-gray-100 p-4 rounded-lg">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4.5">
+  <div class="bg-gray-100 p-4 mb-4 rounded-lg">
+    <h1 class="text-md text-gray-500 mb-4">Últimos 6 meses</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <app-profit-chart [incomesAndExpenses]="icomesAndExpenses" />
+      <app-sales-chart [sales]="sales"></app-sales-chart>
     </div>
   </div>
 }

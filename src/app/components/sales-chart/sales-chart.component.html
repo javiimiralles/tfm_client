@@ -1,0 +1,32 @@
+
+<div class="w-full bg-white rounded-lg shadow-sm dark:bg-gray-800 p-4 md:p-6">
+  <div class="flex justify-between mb-5">
+    <dl>
+      <dt class="text-base font-normal text-gray-500 dark:text-gray-400 pb-1">Ventas</dt>
+      <dd class="leading-none text-2xl font-bold text-gray-900 dark:text-white">Total: {{totalSales}}</dd>
+    </dl>
+  </div>
+  <div id="chart">
+    <apx-chart
+      [series]="chartOptions.series"
+      [chart]="chartOptions.chart"
+      [fill]="chartOptions.fill"
+      [plotOptions]="chartOptions.plotOptions"
+      [legend]="chartOptions.legend"
+      [dataLabels]="chartOptions.dataLabels"
+      [tooltip]="chartOptions.tooltip"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [grid]="chartOptions.grid"
+    ></apx-chart>
+  </div>
+  <div class="grid grid-cols-1 items-center border-gray-200 border-t dark:border-gray-700 justify-between mt-2.5">
+    <div class="pt-5">
+      <a href="#" routerLink="/user/ventas/pedidos-table" class="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <span class="material-symbols-outlined me-1">arrow_outward</span>
+        Ir a pedidos
+      </a>
+    </div>
+  </div>
+</div>
+
