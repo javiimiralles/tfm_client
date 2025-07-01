@@ -25,7 +25,7 @@ export class ProductosViewComponent implements OnInit {
 
   productos: Producto[] = [];
   pageNumber: number = 0;
-  pageSize: number = 10;
+  pageSize: number = 30;
   totalElements: number = 0;
   totalPages: number = 1;
 

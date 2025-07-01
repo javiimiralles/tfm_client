@@ -51,6 +51,8 @@ export class PresupuestoFormComponent implements OnInit {
   showAceptarPresupuestoButton = false;
   showRechazarPresupuestoButton = false;
 
+  productoSeleccionado: Producto;
+
   cardTitle: string = 'Crear un nuevo presupuesto';
   presupuesto: Pedido;
   clientes: Cliente[] = [];
@@ -195,15 +197,16 @@ export class PresupuestoFormComponent implements OnInit {
   }
 
   private setPrecioYSubtotal(productoId: number) {
-    const productoSeleccionado = this.productos.find(p => p.id === +productoId);
-    if (productoSeleccionado) {
-      this.nuevoProductoForm.get('precio').setValue(productoSeleccionado.precioVenta);
+    this.productoSeleccionado = this.productos.find(p => p.id === +productoId);
+    if (this.productoSeleccionado) {
+      this.nuevoProductoForm.get('precio').setValue(this.productoSeleccionado.precioVenta);
       this.actualizarSubtotal();
     }
   }
 
   private actualizarSubtotal() {
-    const precio = +this.nuevoProductoForm.get('precio').value || 0;
+    let precio = +this.nuevoProductoForm.get('precio').value || 0;
+    precio = precio + (precio * (this.productoSeleccionado?.impuestoVenta || 0) / 100);
     const cantidad = +this.nuevoProductoForm.get('cantidad').value || 0;
     const subtotal = precio * cantidad;
     this.nuevoProductoForm.get('subtotal').setValue(subtotal.toFixed(2));
